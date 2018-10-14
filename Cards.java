@@ -6,6 +6,14 @@ public class Cards {
 	public int rank, quantity;
 	
 	/**
+	 * Default Constructor
+	 */
+	public Cards() {
+		suit = null;
+		rank = 0;
+		quantity = 0;
+	}
+	/**
 	 * Constructor method
 	 * @param s - Suit of the card. 1 == "Spades", 2 == "Clubs", 3 == "Hearts", 4 == "Diamonds"
 	 * @param r - Rank of the card. 1 through 10 == 1 through 10, 11 == Jack, 12 == Queen, 13 == King, 14 == Ace

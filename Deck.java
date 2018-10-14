@@ -2,9 +2,13 @@ import java.util.ArrayList;
 
 public class Deck {
 	
-	public Cards deck[][];
+	private static Cards deck[][];
 	private static Deck instance = null;
 	
+	/**
+	 * Populates deck with 52 Cards objects, one for each card.
+	 * Sets quantity of each object to 0.
+	 */
 	private Deck() {
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 14; j++) {
@@ -20,8 +24,13 @@ public class Deck {
 				}
 			}
 		}
+		reset();
 	}
 	
+	/**
+	 * Checks to see if deck already exists
+	 * @return - instance value of deck
+	 */
 	public static Deck getInstance() {
 		if(instance == null) {
 			instance = new Deck();
@@ -29,7 +38,10 @@ public class Deck {
 		return instance;
 	}
 	
-	public void reset() {
+	/**
+	 * Resets deck to include 0 cards
+	 */
+	public static void reset() {
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 14; j++) {
 				deck[i][j].quantity = 0;
@@ -37,7 +49,11 @@ public class Deck {
 		}
 	}
 	
-	public void poker() {
+	/**
+	 * Sets deck to include one of each card
+	 */
+	public static void poker() {
+		reset();
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 14; j++) {
 				deck[i][j].quantity = 1;
@@ -45,7 +61,11 @@ public class Deck {
 		}
 	}
 	
-	public void blackjack() {
+	/**
+	 * Sets deck to include 4 of ecah card
+	 */
+	public static void blackjack() {
+		reset();
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 14; j++) {
 				deck[i][j].quantity = 4;
@@ -53,7 +73,11 @@ public class Deck {
 		}
 	}
 	
-	public void euchre() {
+	/**
+	 * Sets deck to include one of each 9, 10, Jack, Queen, King, Ace
+	 */
+	public static void euchre() {
+		reset();
 		for(int i = 0; i < 4; i++) {
 			for(int j = 9; j < 14; j++) {
 				deck[i][j].quantity = 1;
@@ -61,7 +85,12 @@ public class Deck {
 		}
 	}
 	
-	public ArrayList<Cards> createHand(int quantity) {
+	/**
+	 * Creates a hand with specified amount of cards.
+	 * @param quantity - number of cards in a hand
+	 * @return - complete hand of Cards object
+	 */
+	public static ArrayList<Cards> createHand(int quantity) {
 		ArrayList<Cards> temp = new ArrayList<Cards>();
 		while(temp.size() < quantity) {
 			int suit = (int)(Math.random() * 4 + 1);
@@ -74,7 +103,28 @@ public class Deck {
 		return temp;
 	}
 	
-	public Cards pickRandom() {
+	/**
+	 * Creates a hand to play Euchre, cards restricted to 9, 10, Jack, Queen, King, Ace
+	 * @return - complete hand of Cards object
+	 */
+	public static ArrayList<Cards> createEuchre() {
+		ArrayList<Cards> temp = new ArrayList<Cards>();
+		while(temp.size() < 5) {
+			int suit = (int)(Math.random() * 4 + 1);
+			int rank = (int)(Math.random() * 6 + 9);
+			if(deck[suit][rank].quantity > 0) {
+				temp.add(deck[suit][rank]);
+				deck[suit][rank].quantity --;
+			}
+		}
+		return temp;
+	}
+	
+	/**
+	 * Picks a random card from the deck
+	 * @return - random card available in deck
+	 */
+	public static Cards pickRandom() {
 		int suit, rank;
 		do {
 			suit = (int)(Math.random() * 4 + 1);
@@ -83,5 +133,19 @@ public class Deck {
 		deck[suit][rank].quantity --;
 		
 		return deck[suit][rank];
+	}
+	
+	/**
+	 * Removes specified card from deck used to simulate drawing a card
+	 * @param card - Card to remove from deck
+	 */
+	public static void removeCard(Cards card) {
+		for(int i = 0; i < 14; i++) {
+			for(int j = 0; j < 14; j++) {
+				if(deck[i][j] == card) {
+					deck[i][j].quantity --;
+				}
+			}
+		}
 	}
 }
