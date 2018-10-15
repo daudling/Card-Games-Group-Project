@@ -27,13 +27,7 @@ public class GUI extends JFrame implements ActionListener {
 		panel.setLayout(layout);
 		addButtons();
 		
-		setSize(width, height);
-		setResizable(false);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		setTitle("Card Games!");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		requestFocus();
+		
 	}
 	
 	private void addButtons(){
@@ -82,6 +76,14 @@ public class GUI extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		JFrame gui = new JFrame();
 		gui.getContentPane().add(new GUI(400,500));
+		
+		gui.setSize(width, height);
+		gui.setResizable(false);
+		gui.setLocationRelativeTo(null);
+		gui.setVisible(true);
+		gui.setTitle("Card Games!");
+		gui.setDefaultCloseOperation(gui.EXIT_ON_CLOSE);
+		gui.requestFocus();
 	}
 	
 }
