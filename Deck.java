@@ -93,8 +93,8 @@ public class Deck {
 	public static ArrayList<Cards> createHand(int quantity) {
 		ArrayList<Cards> temp = new ArrayList<Cards>();
 		while(temp.size() < quantity) {
-			int suit = (int)(Math.random() * 4 + 1);
-			int rank = (int)(Math.random() * 14 + 1);
+			int suit = (int)(Math.random() * 4);
+			int rank = (int)(Math.random() * 14);
 			if(deck[suit][rank].quantity > 0) {
 				temp.add(deck[suit][rank]);
 				deck[suit][rank].quantity --;
@@ -110,8 +110,8 @@ public class Deck {
 	public static ArrayList<Cards> createEuchre() {
 		ArrayList<Cards> temp = new ArrayList<Cards>();
 		while(temp.size() < 5) {
-			int suit = (int)(Math.random() * 4 + 1);
-			int rank = (int)(Math.random() * 6 + 9);
+			int suit = (int)(Math.random() * 4);
+			int rank = (int)(Math.random() * 6 + 8);
 			if(deck[suit][rank].quantity > 0) {
 				temp.add(deck[suit][rank]);
 				deck[suit][rank].quantity --;
@@ -127,8 +127,8 @@ public class Deck {
 	public static Cards pickRandom() {
 		int suit, rank;
 		do {
-			suit = (int)(Math.random() * 4 + 1);
-			rank = (int)(Math.random() * 14 + 1);
+			suit = (int)(Math.random() * 4);
+			rank = (int)(Math.random() * 14);
 		} while(deck[suit][rank].quantity == 0);
 		deck[suit][rank].quantity --;
 		
@@ -147,5 +147,9 @@ public class Deck {
 				}
 			}
 		}
+	}
+	
+	public static Cards getCard(int suit, int rank) {
+		return deck[suit][rank];
 	}
 }

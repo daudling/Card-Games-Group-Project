@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Player {
 	
-	private ArrayList<Cards> hand;
+	public ArrayList<Cards> hand;
 	public int playerNum, wins, losses, difficulty, team;
 	
 	/**
@@ -53,5 +53,13 @@ public class Player {
 		Cards temp;
 		temp = hand.get(1);
 		return temp;
+	}
+	
+	public boolean pickUp() {
+		return false;
+	}
+	
+	public ArrayList<Cards> getHand() {
+		return hand;
 	}
 }

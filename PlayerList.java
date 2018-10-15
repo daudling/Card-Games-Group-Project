@@ -28,6 +28,9 @@ public class PlayerList {
 	 * @param newPlayer - player to add
 	 */
 	public void addPlayer(Player newPlayer) {
+		if(players.size() == 4) {
+			return;
+		}
 		players.add(newPlayer);
 	}
 	
