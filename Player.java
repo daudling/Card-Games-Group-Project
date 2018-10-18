@@ -1,3 +1,5 @@
+
+
 import java.util.ArrayList;
 
 public class Player {
@@ -57,6 +59,23 @@ public class Player {
 	
 	public boolean pickUp() {
 		return false;
+	}
+	
+	public void displayHand(){
+		for(int i = 0; i < hand.size(); i++){
+			switch(hand.get(i).rank){
+			case 11: System.out.print("Jack " + hand.get(i).suit + "|");
+			break;
+			case 12: System.out.print("Queen " + hand.get(i).suit + "|");
+			break;
+			case 13: System.out.print("King " + hand.get(i).suit + "|");
+			break;
+			case 14: System.out.print("Ace " + hand.get(i).suit + "|");
+			break;
+			default: System.out.print(hand.get(i).rank + " " + hand.get(i).suit + "|");
+			}
+		}
+		System.out.println("");
 	}
 	
 	public ArrayList<Cards> getHand() {

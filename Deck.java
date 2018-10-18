@@ -1,8 +1,10 @@
+
+
 import java.util.ArrayList;
 
 public class Deck {
 	
-	private static Cards deck[][];
+	private static Cards[][] deck = new Cards[4][13];
 	private static Deck instance = null;
 	
 	/**
@@ -11,15 +13,15 @@ public class Deck {
 	 */
 	private Deck() {
 		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 14; j++) {
+			for(int j = 0; j < 13; j++) {
 				switch(i) {
-				case 1: deck[i][j] = new Cards("Spades", j);
+				case 0: deck[i][j] = new Cards("Spades", j + 2);
 				break;
-				case 2: deck[i][j] = new Cards("Clubs", j);
+				case 1: deck[i][j] = new Cards("Clubs", j + 2);
 				break;
-				case 3: deck[i][j] = new Cards("Hearts", j);
+				case 2: deck[i][j] = new Cards("Hearts", j + 2);
 				break;
-				case 4: deck[i][j] = new Cards("Diamonds", j);
+				case 3: deck[i][j] = new Cards("Diamonds", j + 2);
 				break;
 				}
 			}
@@ -43,8 +45,8 @@ public class Deck {
 	 */
 	public static void reset() {
 		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 14; j++) {
-				deck[i][j].quantity = 0;
+			for(int j = 0; j < 13; j++) {
+				deck[i][j].setQuantity(0);
 			}
 		}
 	}
@@ -55,19 +57,19 @@ public class Deck {
 	public static void poker() {
 		reset();
 		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 14; j++) {
+			for(int j = 0; j < 13; j++) {
 				deck[i][j].quantity = 1;
 			}
 		}
 	}
 	
 	/**
-	 * Sets deck to include 4 of ecah card
+	 * Sets deck to include 4 of each card
 	 */
 	public static void blackjack() {
 		reset();
 		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 14; j++) {
+			for(int j = 0; j < 13; j++) {
 				deck[i][j].quantity = 4;
 			}
 		}
@@ -79,7 +81,7 @@ public class Deck {
 	public static void euchre() {
 		reset();
 		for(int i = 0; i < 4; i++) {
-			for(int j = 9; j < 14; j++) {
+			for(int j = 9; j < 13; j++) {
 				deck[i][j].quantity = 1;
 			}
 		}
@@ -94,7 +96,7 @@ public class Deck {
 		ArrayList<Cards> temp = new ArrayList<Cards>();
 		while(temp.size() < quantity) {
 			int suit = (int)(Math.random() * 4);
-			int rank = (int)(Math.random() * 14);
+			int rank = (int)(Math.random() * 13);
 			if(deck[suit][rank].quantity > 0) {
 				temp.add(deck[suit][rank]);
 				deck[suit][rank].quantity --;
@@ -128,7 +130,7 @@ public class Deck {
 		int suit, rank;
 		do {
 			suit = (int)(Math.random() * 4);
-			rank = (int)(Math.random() * 14);
+			rank = (int)(Math.random() * 13);
 		} while(deck[suit][rank].quantity == 0);
 		deck[suit][rank].quantity --;
 		
@@ -140,8 +142,8 @@ public class Deck {
 	 * @param card - Card to remove from deck
 	 */
 	public static void removeCard(Cards card) {
-		for(int i = 0; i < 14; i++) {
-			for(int j = 0; j < 14; j++) {
+		for(int i = 0; i < 13; i++) {
+			for(int j = 0; j < 13; j++) {
 				if(deck[i][j] == card) {
 					deck[i][j].quantity --;
 				}

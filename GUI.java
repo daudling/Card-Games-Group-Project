@@ -1,9 +1,10 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GUI extends JFrame implements ActionListener {
+public class GUI extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	int width, height;
@@ -28,6 +29,14 @@ public class GUI extends JFrame implements ActionListener {
 		addButtons();
 		
 		
+	}
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public int getHeight(){
+		return height;
 	}
 	
 	private void addButtons(){
@@ -74,10 +83,13 @@ public class GUI extends JFrame implements ActionListener {
 	}
 		
 	public static void main(String[] args) {
-		JFrame gui = new JFrame();
-		gui.getContentPane().add(new GUI(400,500));
+		JFrame gui = new JFrame("Card game");
 		
-		gui.setSize(width, height);
+		GUI test = new GUI(400,500);
+		
+		gui.getContentPane().add(test);
+		
+		gui.setSize(test.getWidth(), test.getHeight());
 		gui.setResizable(false);
 		gui.setLocationRelativeTo(null);
 		gui.setVisible(true);
