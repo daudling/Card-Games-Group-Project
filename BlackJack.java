@@ -136,17 +136,8 @@ public class BlackJack {
 	}
 	
 	public static void main(String [] args){
-		
-		
 		Deck.getInstance();
 		BlackJack eGame = new BlackJack();
 		eGame.playBlackJack(200);
 	}
 }
-
-
-
-
-
-
-
