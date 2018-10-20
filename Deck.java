@@ -81,7 +81,7 @@ public class Deck {
 	public static void euchre() {
 		reset();
 		for(int i = 0; i < 4; i++) {
-			for(int j = 9; j < 13; j++) {
+			for(int j = 7; j < 13; j++) {
 				deck[i][j].quantity = 1;
 			}
 		}
@@ -113,7 +113,7 @@ public class Deck {
 		ArrayList<Cards> temp = new ArrayList<Cards>();
 		while(temp.size() < 5) {
 			int suit = (int)(Math.random() * 4);
-			int rank = (int)(Math.random() * 6 + 8);
+			int rank = (int)(Math.random() * 8 + 8);
 			if(deck[suit][rank].quantity > 0) {
 				temp.add(deck[suit][rank]);
 				deck[suit][rank].quantity --;
@@ -142,7 +142,7 @@ public class Deck {
 	 * @param card - Card to remove from deck
 	 */
 	public static void removeCard(Cards card) {
-		for(int i = 0; i < 13; i++) {
+		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 13; j++) {
 				if(deck[i][j] == card) {
 					deck[i][j].quantity --;
@@ -153,5 +153,17 @@ public class Deck {
 	
 	public static Cards getCard(int suit, int rank) {
 		return deck[suit][rank];
+	}
+	
+	public static ArrayList<Cards> getDeck() {
+		ArrayList<Cards> temp = new ArrayList<Cards>();
+		for(int i = 0; i < 4; i++) {
+			for(int j = 0; j < 13; j++) {
+				if(deck[i][j].quantity > 0) {
+					temp.add(deck[i][j]);
+				}
+			}
+		}
+		return temp;
 	}
 }
