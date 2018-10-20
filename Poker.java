@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,7 +9,7 @@ public class Poker {
 	private int chips = 500;
 	private int pot;
 	private int bet;
-	private int score;
+	private int score = 0;
 	private int totalBet = 0;
 	private int tableBet = 0;
 	private Player dealer = new Player(0);
@@ -17,8 +18,9 @@ public class Poker {
 	private Scanner scan = new Scanner(System.in);
 	private String action = "";
 	private boolean fold = false;
-	int[] rankCount = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-	int[] suitCount = {0,0,0,0};
+	private int singles = 0, pairs = 0, triples = 0, quads = 0;
+	int[] rankCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	int[] suitCount = { 0, 0, 0, 0 };
 
 	public void setBet(int c) {
 		bet = c;
@@ -44,6 +46,8 @@ public class Poker {
 			break;
 		case "fold":
 			fold = true;
+			totalBet = 0;
+			bet = 0;
 			break;
 		case "call":
 			bet += tableBet;
@@ -74,6 +78,7 @@ public class Poker {
 			System.out.println("Current Pot: " + pot);
 			bet = 0;
 			tableBet = 0;
+			System.out.println(totalBet);
 			System.out.println();
 			System.out.println();
 			System.out.println();
@@ -85,18 +90,17 @@ public class Poker {
 		for (int i = 0; i < p.hand.size(); i++) {
 			finale[i] = new Cards(p.hand.get(i).suit, p.hand.get(i).rank);
 		}
-			
-		}
-	
-	public void createFinal2(Player p){
+
+	}
+
+	public void createFinal2(Player p) {
 		int x = 5;
 		for (int i = 0; i < p.hand.size(); i++) {
 			finale[x] = new Cards(p.hand.get(i).suit, p.hand.get(i).rank);
 			x++;
 		}
-			
-}
-	
+
+	}
 
 	public void startGame() {
 		Deck.poker();
@@ -115,14 +119,32 @@ public class Poker {
 		createFinalHand(dealer);
 		createFinal2(p1);
 		counter();
-		result();
+		contains();
 
+		dealer.displayHand();
+		System.out.println();
+		p1.displayHand();
+		result();
+		chips += totalBet * score;
+		System.out.println("winnings: " + totalBet * score);
+	}
+
+	public void contains() {
+		for (int i = 0; i < rankCount.length; i++) {
+			if (rankCount[i] == 4) {
+				quads++;
+			} else if (rankCount[i] == 3) {
+				triples++;
+			} else if (rankCount[i] == 2) {
+				pairs++;
+			}
+		}
 	}
 
 	public void counter() {
 
-		for (int i = 0; i < finale.length-1; i++) {
-			rankCount[finale[i].getRank()] = 1 ;
+		for (int i = 0; i < finale.length; i++) {
+			rankCount[finale[i].getRank()]++;
 
 			switch (finale[i].getSuit()) {
 			case "Diamonds":
@@ -140,11 +162,34 @@ public class Poker {
 			}
 		}
 	}
-	
-	
-	public void result(){
-		for (int i=0; i<4; i++){
-			System.out.println(suitCount[i]);
+
+	public void result() {
+
+		for (int i = 0; i < suitCount.length; i++) {
+			if (suitCount[i] >= 5) {
+				System.out.println("Flush!");
+				score += 5;
+			}
+		}
+		if (quads >= 1)
+
+		{
+			System.out.println("Four of a Kind!");
+			score += 4;
+		} else if (triples >= 1 && pairs >= 1) {
+			System.out.println("Full House!");
+			score += 4;
+		} else if (triples >= 1) {
+			System.out.println("Three of a Kind!");
+			score += 3;
+		} else if (pairs >= 2) {
+			System.out.println("Two Pair!");
+			score += 2;
+		} else if (pairs == 1) {
+			System.out.println("One Pair!");
+			score += 1;
+		} else {
+			System.out.println("Too Bad!");
 		}
 	}
 

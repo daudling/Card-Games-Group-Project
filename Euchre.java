@@ -117,7 +117,7 @@ public class Euchre {
 	public Cards chooseCard(Player player) {
 		Cards temp = new Cards();
 		switch(player.difficulty) {
-		case 0: temp = player.chooseCard();
+		case 0: temp = player.chooseCard(1);
 		break;
 		case 1: temp = easyChooseCard(player);
 		break;

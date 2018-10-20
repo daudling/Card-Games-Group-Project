@@ -51,9 +51,9 @@ public class Player {
 	 * Prompts user to select card from hand
 	 * @return - Card selected by user
 	 */
-	public Cards chooseCard() {
+	public Cards chooseCard(int x) {
 		Cards temp;
-		temp = hand.get(1);
+		temp = hand.get(x);
 		return temp;
 	}
 	
