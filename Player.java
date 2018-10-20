@@ -1,5 +1,5 @@
 
-
+import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Player {
@@ -13,7 +13,7 @@ public class Player {
 	 */
 	public Player(int player) {
 		playerNum = player;
-		hand = null;
+		hand = new ArrayList<Cards>();
 		wins = 0;
 		losses = 0;
 		difficulty = 0;
@@ -25,11 +25,7 @@ public class Player {
 	 * @param card - card selected
 	 */
 	public void removeCard(Cards card) {
-		for(Cards x : hand) {
-			if(x.rank == card.rank && x.suit == card.suit) {
-				hand.remove(x);
-			}
-		}
+		hand.remove(card);
 	}
 	
 	/**
@@ -52,13 +48,29 @@ public class Player {
 	 * @return - Card selected by user
 	 */
 	public Cards chooseCard() {
-		Cards temp;
-		temp = hand.get(1);
-		return temp;
+		boolean cardValid = false;
+		System.out.println("Current Cards in hand");
+		for(Cards c : hand) {
+			System.out.print(c.rank + " of " + c.suit + " ");
+		}
+		System.out.println();
+		Scanner sc = new Scanner(System.in);
+		int card = -1;
+		System.out.println("Choose which card to play");
+		while(cardValid == false) {
+			card = sc.nextInt();
+			if(card < 0 || card > 4) {
+				System.out.println("Choose card 0-4");
+			}
+			else {
+				cardValid = true;
+			}
+		}
+		return hand.get(card);
 	}
 	
 	public boolean pickUp() {
-		return false;
+		return true;
 	}
 	
 	public void displayHand(){

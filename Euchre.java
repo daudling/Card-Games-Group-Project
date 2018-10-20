@@ -57,9 +57,16 @@ public class Euchre {
 		table.add(card);
 	}
 	
+	/**
+	 * Proceeds game forward by taking each turn 
+	 * @param r - the current round the game is on, when it reaches round 5 it should stop the match
+	 * @param team1 - the number of rounds won by the team in the match
+	 * @param team2 - the number of rounds won by the team in the match
+	 */
 	public void turn(int r, int team1, int team2) {
+		table.clear();
 		Cards temp, high = null;
-		int round = 0;
+		int round = 1;
 		int points1 = team1;
 		int points2 = team2;
 		Player winner = null;
@@ -68,7 +75,9 @@ public class Euchre {
 			table.add(temp);
 			x.removeCard(temp);
 		}
+		System.out.println("Cards on table:");
 		for(Cards y : table) {
+			System.out.println(y.rank + " of " + y.suit);
 			if(high == null) {
 				high = y;
 			}
@@ -87,7 +96,9 @@ public class Euchre {
 				}
 			}
 		}
+		System.out.println("Winner of round");
 		winner = turnOrder.get(table.indexOf(high));
+		System.out.println(winner.playerNum);
 		round++;
 		if(winner.team == 1) {
 			points1++;
@@ -114,6 +125,15 @@ public class Euchre {
 		}
 	}
 	
+	/**
+	 * Decides who's taking the turn and how they should take it.
+	 * 0 - is a player's turn
+	 * 1 - is a easy bot
+	 * 2 - is a medium bot
+	 * 3 - is a hard bot
+	 * @param player - the current players turn.
+	 * @return - the card the current player chose.
+	 */
 	public Cards chooseCard(Player player) {
 		Cards temp = new Cards();
 		switch(player.difficulty) {
@@ -129,6 +149,11 @@ public class Euchre {
 		return temp;
 	}
 	
+	/**
+	 * Tests to see if anyone wants the dealer to pickup the card flipped up at start of round.
+	 * @param player - the current player deciding should they pick it up.
+	 * @return - the players choice if they want to pick it up or not.
+	 */
 	public boolean pickUpCard(Player player) {
 		switch(player.difficulty) {
 		case 0: if(player.pickUp()) {
@@ -151,6 +176,11 @@ public class Euchre {
 		return false;
 	}
 	
+	/**
+	 * ChooseCard method for an easy bot
+	 * @param player - current bot player
+	 * @return - card chosen by bot
+	 */
 	private Cards easyChooseCard(Player player) {
 		Cards temp = null;
 		if(hasLead(player)) {
@@ -186,6 +216,11 @@ public class Euchre {
 		return temp;
 	}
 	
+	/**
+	 * Easy bot method for to decide if the dealer should pick it up
+	 * @param player
+	 * @return
+	 */
 	private boolean easyPickUp(Player player) {
 		int count = 0;
 		for(Cards x : player.getHand()) {
@@ -199,24 +234,49 @@ public class Euchre {
 		return false;
 	}
 	
+	/**
+	 * Medium bot method to decide if the dealer should pick it up
+	 * @param player
+	 * @return
+	 */
 	private boolean mediumPickUp(Player player) {
 		return false;
 	}
 	
+	/**
+	 * Hard bot method to decide if the dealer should pick it up
+	 * @param player
+	 * @return
+	 */
 	private boolean hardPickUp(Player player) {
 		return false;
 	}
 	
+	/**
+	 * ChooseCard method for a medium bot
+	 * @param player
+	 * @return
+	 */
 	private Cards mediumChooseCard(Player player) {
 		Cards temp = null;
 		return temp;
 	}
 	
+	/**
+	 * ChooseCard method for a hard bot
+	 * @param player
+	 * @return
+	 */
 	private Cards hardChooseCard(Player player) {
 		Cards temp = null;
 		return temp;
 	}
 	
+	/**
+	 * Method to tell if current player has the suit lead for the round
+	 * @param player - current players turn
+	 * @return - true if they have suit lead, false if they don't have suit lead
+	 */
 	private boolean hasLead(Player player) {
 		for(Cards x : player.getHand()) {
 			if(x.suit == lead) {
@@ -226,6 +286,11 @@ public class Euchre {
 		return false;
 	}
 	
+	/**
+	 * Method to tell if current player has trump suit or left bower
+	 * @param player - current players turn
+	 * @return - true if they have suit lead, false if they don't have suit lead
+	 */
 	private boolean hasTrump(Player player) {
 		for(Cards x : player.getHand()) {
 			if(x.suit == trump) {
@@ -238,6 +303,11 @@ public class Euchre {
 		return false;
 	}
 	
+	/**
+	 * Decides whether input card is trump or not
+	 * @param card
+	 * @return
+	 */
 	private boolean isTrump(Cards card) {
 		if(card.suit == trump) {
 			return true;
@@ -247,6 +317,11 @@ public class Euchre {
 		}
 	}
 	
+	/**
+	 * Decides whether input card is the suit lead for the round or not
+	 * @param card
+	 * @return
+	 */
 	private boolean isLead(Cards card) {
 		if(card.suit == lead) {
 			return true;
@@ -256,6 +331,9 @@ public class Euchre {
 		}
 	}
 	
+	/**
+	 * Sets the order of turns for each round
+	 */
 	public void setOrder() {
 		if(turnOrder.isEmpty()) {
 			for(Player x : PlayerList.players) {
@@ -268,10 +346,17 @@ public class Euchre {
 		}
 	}
 		
+	/**
+	 * Resets the table ensures its empty.
+	 */
 	public void resetTable() {
 		table.clear();
 	}
 	
+	/**
+	 * Starts each match by flipping up a card and letting players decide to have dealer pick it up
+	 * @return
+	 */
 	public boolean startRound() {
 		flipUp = Deck.pickRandom();
 		for(Player x : turnOrder) {
@@ -287,10 +372,20 @@ public class Euchre {
 	public void playEuchre() {
 		resetTable();
 		setOrder();
+		for(Player p : turnOrder) {
+			System.out.println(p.playerNum + " Difficulty: " + p.difficulty);
+		}
 		Deck.euchre();
 		for(Player x : PlayerList.players) {
-			x.hand.clear();
+			if(!x.hand.isEmpty()) {
+				x.hand.clear();
+			}
 			x.addHand(NUM_CARDS);
+			System.out.print(x.playerNum + "'s hand: ");
+			for(Cards h : x.getHand()) {
+				System.out.print(h.rank + " of " + h.suit + " ");
+			}
+			System.out.println("");
 		}
 		if(startRound()) {
 			while(inGame == 0) {
@@ -317,5 +412,31 @@ public class Euchre {
 				}
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		Player person = new Player(1);
+		Player bot1 = new Player(2);
+		Player bot2 = new Player(3);
+		Player bot3 = new Player(4);
+		bot1.difficulty = 1;
+		bot2.difficulty = 1;
+		bot3.difficulty = 1;
+		person.team = 1;
+		bot1.team = 1;
+		bot2.team = 2;
+		bot3.team = 2;
+		PlayerList list = PlayerList.getInstance();
+		list.addPlayer(person);
+		list.addPlayer(bot1);
+		list.addPlayer(bot2);
+		list.addPlayer(bot3);
+		
+		Deck.getInstance();
+		
+		System.out.println("Starting Game of Euchre");
+		
+		Euchre game = new Euchre();
+		game.playEuchre();
 	}
 }
