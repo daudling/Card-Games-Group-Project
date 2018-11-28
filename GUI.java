@@ -1,33 +1,75 @@
 
+package project;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class GUI extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-
-	int width, height;
 	
-	JButton game1 = new JButton("Game 1");
-	JButton game2 = new JButton("Game 2");
-	JButton game3 = new JButton("Game 3");
-	JButton game4 = new JButton("Game 4");
+	
+	int width, height;
+	Player test = new Player(0);
+	ArrayList<ImageIcon> visualCards = new ArrayList<ImageIcon>();
+	//Deck playDeck = new Deck();
+	JMenuItem quitItem;
+	JMenuItem backItem;
+	
+	JButton game1 = new JButton("Black Jack");
+	JButton game2 = new JButton("Poker");
+	JButton game3 = new JButton("Euchre");
+	JButton game4 = new JButton("Go Fish!");
 	JButton exit = new JButton("Exit");
 	
 	CardLayout layout = new CardLayout();
 	
-	JPanel panel = new JPanel();
-	JPanel game = new  JPanel();
-	JPanel menu = new JPanel();
+	JPanel panel;
+	JPanel game;
+	JPanel menu; 
+	JPanel blackJ; 
 	
-	public GUI(int width, int height){
+	/*Creates an array list of image icons to use when displaying your cards. 
+	They should correspond to the way the cards are ordered in the Deck class 
+	with two more "cards" added to it. A blank card and a face down card. */
+	private void createDeck(){
+	    for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 13; j++) {
+                switch(i) {
+                case 0: visualCards.add(new ImageIcon((j+2)+ "_of_spades.png"));
+                break;
+                case 1: visualCards.add(new ImageIcon((j+2)+ "_of_clubs.png"));
+                break;
+                case 2: visualCards.add(new ImageIcon((j+2)+ "_of_hearts.png"));
+                break;
+                case 3: visualCards.add(new ImageIcon((j+2)+ "_of_diamonds.png"));
+                break;
+                }
+            }
+        }
+	    visualCards.add(new ImageIcon("FaceDown.png")); //52
+	    visualCards.add(new ImageIcon("Blank.png"));    //53
+	    
+	}
+	
+
+	public GUI(int width, int height,JMenuItem dquitItem,JMenuItem dbackItem){
+	    createDeck();
 		this.width = width;
 		this.height = height;
-		
+		quitItem = dquitItem;
+		backItem = dbackItem;
+		panel = new JPanel();
+	    game = new  JPanel();
+	    menu = new JPanel();
+	    blackJ = new BlackJackGUI(test,visualCards);
 		panel.setLayout(layout);
-		addButtons();
 		
+		
+		addButtons();
+
 		
 	}
 	
@@ -45,6 +87,8 @@ public class GUI extends JPanel implements ActionListener {
 		game3.addActionListener(this);
 		game4.addActionListener(this);
 		exit.addActionListener(this);
+		quitItem.addActionListener(this);
+		backItem.addActionListener(this);
 		
 		menu.add(game1);
 		menu.add(game2);
@@ -52,12 +96,12 @@ public class GUI extends JPanel implements ActionListener {
 		menu.add(game4);
 		menu.add(exit);
 		
-		
 		game.setBackground(Color.GREEN);
-		menu.setBackground(Color.MAGENTA);
+		menu.setBackground(Color.BLUE);
 		
 		panel.add(menu,"Menu");
 		panel.add(game, "Game");
+		panel.add(blackJ,"BJ");
 		
 		add(panel);
 		layout.show(panel,"Menu");
@@ -72,21 +116,36 @@ public class GUI extends JPanel implements ActionListener {
 		if(source == exit){
 			System.exit(0);
 		}else if (source == game1){
-			layout.show(panel, "Game 1");
+			layout.show(panel,"BJ");
 		}else if (source == game2){
 			layout.show(panel, "Game 2");
 		}else if (source == game2){
 			layout.show(panel, "Game 3");
 		}else if (source == game4){
 			layout.show(panel, "Game 4");
+		}else if (source == backItem){
+		    layout.show(panel, "Menu");
+		}else if (source == quitItem){
+		    System.exit(0);
 		}
 	}
 		
 	public static void main(String[] args) {
 		JFrame gui = new JFrame("Card game");
 		
-		GUI test = new GUI(400,500);
 		
+		JMenuBar menuB = new JMenuBar();
+	    JMenu fileMenu = new JMenu("File");
+	    JMenuItem quitItem = new JMenuItem ("Exit");
+	    JMenuItem backItem = new JMenuItem ("Leave Game");
+	    
+	    fileMenu.add(quitItem);
+	    fileMenu.add(backItem);
+	    gui.setJMenuBar(menuB);
+	    menuB.add(fileMenu);
+	    
+	    GUI test = new GUI(400,500,quitItem, backItem);
+	    
 		gui.getContentPane().add(test);
 		
 		gui.setSize(test.getWidth(), test.getHeight());
@@ -99,17 +158,3 @@ public class GUI extends JPanel implements ActionListener {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
