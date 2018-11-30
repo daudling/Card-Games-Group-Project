@@ -1,22 +1,19 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 //Current build of this class can only have one player and may have bugs when calculating hand value, this will be fixed in the next version
 public class Poker {
 
-	private int chips = 500;
-	private int pot;
+	private static int chips = 500;
+	private double pot;
 	private int bet;
-	private int score = 0;
+	private double score = 0;
 	private int totalBet = 0;
 	private int tableBet = 0;
 	private Player dealer = new Player(0);
 	private Player p1 = new Player(1);
 	Cards[] finale = new Cards[7];
-	private Scanner scan = new Scanner(System.in);
-	private String action = "";
+	private static Scanner scan = new Scanner(System.in);
+	private static String action = "";
 	private boolean fold = false;
 	private int singles = 0, pairs = 0, triples = 0, quads = 0;
 	int[] rankCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -78,11 +75,12 @@ public class Poker {
 			System.out.println("Current Pot: " + pot);
 			bet = 0;
 			tableBet = 0;
-			System.out.println(totalBet);
+			System.out.println("Current Bet: " + totalBet);
 			System.out.println();
 			System.out.println();
 			System.out.println();
 			System.out.println();
+
 		}
 	}
 
@@ -104,6 +102,7 @@ public class Poker {
 
 	public void startGame() {
 		Deck.poker();
+		score = 0;
 		dealer.addHand(0);
 		p1.addHand(2);
 		fold = false;
@@ -120,13 +119,12 @@ public class Poker {
 		createFinal2(p1);
 		counter();
 		contains();
-
 		dealer.displayHand();
 		System.out.println();
 		p1.displayHand();
 		result();
-		chips += totalBet * score;
-		System.out.println("winnings: " + totalBet * score);
+		chips += pot * ((score / 10) + 1);
+		System.out.println("winnings: " + pot * ((score / 10) + 1));
 	}
 
 	public void contains() {
@@ -164,20 +162,40 @@ public class Poker {
 	}
 
 	public void result() {
-
+		boolean flush = false;
+		boolean straight = false;
+		int sequence = 1;
 		for (int i = 0; i < suitCount.length; i++) {
 			if (suitCount[i] >= 5) {
-				System.out.println("Flush!");
-				score += 5;
+				flush = true;
 			}
 		}
-		if (quads >= 1)
+		for (int i = 0; i < rankCount.length; i++) {
+			if (sequence != 5) {
+				if (rankCount[i] != 0 && rankCount[i + 1] != 0) {
+					sequence++;
+				} else {
+					sequence = 1;
+				}
+			} else {
+				straight = true;
+			}
+		}
 
-		{
+		if (flush && straight) {
+			System.out.println("Straight Flush!");
+			score += 10;
+		} else if (quads >= 1) {
 			System.out.println("Four of a Kind!");
-			score += 4;
+			score += 8;
 		} else if (triples >= 1 && pairs >= 1) {
 			System.out.println("Full House!");
+			score += 7;
+		} else if (flush) {
+			System.out.println("Flush!");
+			score += 6;
+		} else if (straight) {
+			System.out.println("Flush!");
 			score += 4;
 		} else if (triples >= 1) {
 			System.out.println("Three of a Kind!");
@@ -190,12 +208,24 @@ public class Poker {
 			score += 1;
 		} else {
 			System.out.println("Too Bad!");
+			score = 0;
 		}
 	}
 
 	public static void main(String[] args) {
 		Deck.getInstance();
 		Poker Game = new Poker();
-		Game.startGame();
+		boolean play = true;
+		while (play) {
+			Game.startGame();
+			System.out.println("Play another hand? (y/n): ");
+			action = scan.next();
+			if (action.equals("y")) {
+				play = true;
+			} else {
+				play = false;
+			}
+		}
+		System.out.println("Final Chip Total: " + chips);
 	}
 }
