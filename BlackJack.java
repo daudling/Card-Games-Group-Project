@@ -1,6 +1,6 @@
 
 
-package project;
+
 
 import java.util.Scanner;
 
@@ -11,7 +11,7 @@ public class BlackJack {
     private int money = 1000;
     private int wager;
     private String ans = "";
-    private Player dealer = new Player(1);
+    private Player dealer = new Player();
     private Player user;
     private Scanner scnr = new Scanner(System.in);
 
@@ -25,7 +25,7 @@ public class BlackJack {
     }
 
     public BlackJack(){
-        user = new Player(0);
+        user = new Player();
         money = 1000;
     }
 
@@ -221,10 +221,10 @@ public class BlackJack {
 
     }
 
-    public static void main(String [] args){
-        Deck.getInstance();
-        BlackJack eGame = new BlackJack();
-        eGame.playBlackJack();
-    }
+//    public static void main(String [] args){
+//        Deck.getInstance();
+//        BlackJack eGame = new BlackJack();
+//        eGame.playBlackJack();
+//    }
 }
 

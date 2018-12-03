@@ -1,5 +1,5 @@
 
-package project;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,6 @@ public class GUI extends JPanel implements ActionListener {
 	
 	
 	int width, height;
-	Player test = new Player(0);
 	ArrayList<ImageIcon> visualCards = new ArrayList<ImageIcon>();
 	//Deck playDeck = new Deck();
 	JMenuItem quitItem;
@@ -22,6 +21,7 @@ public class GUI extends JPanel implements ActionListener {
 	JButton game2 = new JButton("Poker");
 	JButton game3 = new JButton("Euchre");
 	JButton game4 = new JButton("Go Fish!");
+	JButton playerList = new JButton("Player List");
 	JButton exit = new JButton("Exit");
 	
 	CardLayout layout = new CardLayout();
@@ -30,6 +30,8 @@ public class GUI extends JPanel implements ActionListener {
 	JPanel game;
 	JPanel menu; 
 	JPanel blackJ; 
+	JPanel players;
+	JPanel Euchre;
 	
 	/*Creates an array list of image icons to use when displaying your cards. 
 	They should correspond to the way the cards are ordered in the Deck class 
@@ -64,7 +66,6 @@ public class GUI extends JPanel implements ActionListener {
 		panel = new JPanel();
 	    game = new  JPanel();
 	    menu = new JPanel();
-	    blackJ = new BlackJackGUI(test,visualCards);
 		panel.setLayout(layout);
 		
 		
@@ -86,6 +87,7 @@ public class GUI extends JPanel implements ActionListener {
 		game2.addActionListener(this);
 		game3.addActionListener(this);
 		game4.addActionListener(this);
+		playerList.addActionListener(this);
 		exit.addActionListener(this);
 		quitItem.addActionListener(this);
 		backItem.addActionListener(this);
@@ -94,6 +96,7 @@ public class GUI extends JPanel implements ActionListener {
 		menu.add(game2);
 		menu.add(game3);
 		menu.add(game4);
+		menu.add(playerList);
 		menu.add(exit);
 		
 		game.setBackground(Color.GREEN);
@@ -101,7 +104,7 @@ public class GUI extends JPanel implements ActionListener {
 		
 		panel.add(menu,"Menu");
 		panel.add(game, "Game");
-		panel.add(blackJ,"BJ");
+//		panel.add(blackJ,"BJ");
 		
 		add(panel);
 		layout.show(panel,"Menu");
@@ -127,6 +130,8 @@ public class GUI extends JPanel implements ActionListener {
 		    layout.show(panel, "Menu");
 		}else if (source == quitItem){
 		    System.exit(0);
+		}else if (source == playerList) {
+			layout.show(panel,  "players");
 		}
 	}
 		
@@ -144,7 +149,7 @@ public class GUI extends JPanel implements ActionListener {
 	    gui.setJMenuBar(menuB);
 	    menuB.add(fileMenu);
 	    
-	    GUI test = new GUI(400,500,quitItem, backItem);
+	    GUI test = new GUI(1080,720,quitItem, backItem);
 	    
 		gui.getContentPane().add(test);
 		

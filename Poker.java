@@ -11,8 +11,8 @@ public class Poker {
 	private int score;
 	private int totalBet = 0;
 	private int tableBet = 0;
-	private Player dealer = new Player(0);
-	private Player p1 = new Player(1);
+	private Player dealer = PlayerList.players.get(1);
+	private Player p1 = PlayerList.players.get(0);
 	Cards[] finale = new Cards[7];
 	private Scanner scan = new Scanner(System.in);
 	private String action = "";

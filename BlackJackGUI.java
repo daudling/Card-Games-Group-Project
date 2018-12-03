@@ -1,5 +1,3 @@
-package project;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,8 +27,8 @@ public class BlackJackGUI extends JPanel implements ActionListener {
     private ArrayList<ImageIcon> visualDeck = new ArrayList<ImageIcon>();
 
 
-    public BlackJackGUI(Player player, ArrayList<ImageIcon> vDeck){
-        user = player;
+    public BlackJackGUI(ArrayList<ImageIcon> vDeck){
+        user = PlayerList.players.get(0);
         game = new BlackJack(user);
         
         visualDeck = vDeck;
