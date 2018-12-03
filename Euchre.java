@@ -169,15 +169,15 @@ public class Euchre {
 		}
 		break;
 		case 1: if(easyPickUp(player)) {
-			return true;
+			return easyPickUp(player);
 		}
 		break;
 		case 2: if(mediumPickUp(player)) {
-			return true;
+			return mediumPickUp(player);
 		}
 		break;
 		case 3: if(hardPickUp(player)) {
-			return true;
+			return hardPickUp(player);
 		}
 		break;
 		}
@@ -372,13 +372,14 @@ public class Euchre {
 	 * @return
 	 */
 	private boolean mediumPickUp(Player player) {
+		Player partner = PlayerList.players.get((player.playerNum + 2) %4);
 		int count = 0;
 		for(Cards x : player.getHand()) {
 			if(x.suit == flipUp.suit || x == leftBower) {
 				count++;
 			}
 		}
-		if(count >= 3 && (turnOrder.get(0).playerNum % 2) == (player.playerNum % 2)) {
+		if(count >= 3 && partner.playerNum % 2 == (player.playerNum % 2)) {
 			return true;
 		}
 		else if( count >= 3 && flipUp.rank < 10) {
