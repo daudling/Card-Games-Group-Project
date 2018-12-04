@@ -126,6 +126,10 @@ public class PlayerListGUI extends JPanel implements ActionListener {
 	
 	private void updateList() {
 		update = 1;
+		one.setText("Player 1: ");
+		two.setText("Player 2: ");
+		three.setText("Player 3: ");
+		four.setText("Player 4: ");
 		for(Player x : PlayerList.players) {
 			switch(update) {
 			case 1:
@@ -159,7 +163,7 @@ public class PlayerListGUI extends JPanel implements ActionListener {
 			}
 		}
 		else if(source == remove) {
-			if(!PlayerList.players.isEmpty()) {
+			if(p < PlayerList.players.size()) {
 				PlayerList.removePlayer(p);
 				updateList();
 			}
@@ -177,16 +181,16 @@ public class PlayerListGUI extends JPanel implements ActionListener {
 			d = 3;
 		}
 		else if(source == bone) {
-			p = 1;
+			p = 0;
 		}
 		else if(source == btwo) {
-			p = 2;
+			p = 1;
 		}
 		else if(source == bthree) {
-			p = 3;
+			p = 2;
 		}
 		else if(source == bfour) {
-			p = 4;
+			p = 3;
 		}
 	}
 }

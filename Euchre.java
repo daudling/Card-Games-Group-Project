@@ -9,6 +9,10 @@ public class Euchre {
 	private ArrayList<Cards> table = new ArrayList<Cards>();
 	private ArrayList<Player> turnOrder = new ArrayList<Player>();
 	
+	public static Cards input = null;
+	public static boolean decided = false, pickUp = false;
+	public static ArrayList<Cards> hand = null;
+	
 	public void setTrump(String trump) {
 		switch(trump) {
 		case "Spades": this.trump = "Spades";
@@ -62,8 +66,9 @@ public class Euchre {
 	 * @param r - the current round the game is on, when it reaches round 5 it should stop the match
 	 * @param team1 - the number of rounds won by the team in the match
 	 * @param team2 - the number of rounds won by the team in the match
+	 * @throws InterruptedException 
 	 */
-	public void turn(int r, int team1, int team2) {
+	public void turn(int r, int team1, int team2) throws InterruptedException {
 		table.clear();
 		Cards temp, high = null;
 		int playerHigh = 0;
@@ -144,11 +149,16 @@ public class Euchre {
 	 * 3 - is a hard bot
 	 * @param player - the current players turn.
 	 * @return - the card the current player chose.
+	 * @throws InterruptedException 
 	 */
-	public Cards chooseCard(Player player) {
+	public Cards chooseCard(Player player) throws InterruptedException {
+		decided = false;
 		Cards temp = new Cards();
 		switch(player.difficulty) {
-		case 0: temp = player.chooseCard();
+		case 0: while(decided == false) {
+			Thread.sleep(100);
+		}
+		temp = input;
 		break;
 		case 1: temp = easyChooseCard(player);
 		break;
@@ -164,10 +174,16 @@ public class Euchre {
 	 * Tests to see if anyone wants the dealer to pickup the card flipped up at start of round.
 	 * @param player - the current player deciding should they pick it up.
 	 * @return - the players choice if they want to pick it up or not.
+	 * @throws InterruptedException 
 	 */
-	public boolean pickUpCard(Player player) {
+	public boolean pickUpCard(Player player) throws InterruptedException {
+		decided = false;
 		switch(player.difficulty) {
-		case 0: if(player.pickUp()) {
+		case 0: hand = player.hand;
+			while(decided = false) {
+			Thread.sleep(100);
+		}
+		if(pickUp = true) {
 			return true;
 		}
 		break;
@@ -743,8 +759,9 @@ public class Euchre {
 	/**
 	 * Starts each match by flipping up a card and letting players decide to have dealer pick it up
 	 * @return
+	 * @throws InterruptedException 
 	 */
-	public boolean startRound() {
+	public boolean startRound() throws InterruptedException {
 		flipUp = Deck.pickRandom();
 		for(Player x : turnOrder) {
 			if(pickUpCard(x)) {
@@ -755,9 +772,13 @@ public class Euchre {
 		return false;
 	}
 	
-	public void discard(Player player) {
+	public void discard(Player player) throws InterruptedException {
+		decided = false;
 		switch(player.difficulty) {
-		case 0: player.removeCard();
+		case 0: while(decided == false) {
+			Thread.sleep(100);
+		}
+		player.hand.remove(input);
 		break;
 		case 1: discardCard(player);
 		break;
@@ -787,7 +808,17 @@ public class Euchre {
 		player.hand.remove(temp);
 	}
 	
-	public void playEuchre() {
+	public void setGame(boolean val) {
+		if(val == true) {
+			inGame = 0;
+		}
+		else {
+			inGame = 1;
+		}
+	}
+	
+	public void playEuchre() throws InterruptedException {
+		setGame(true);
 		resetTable();
 		setOrder();
 		Deck.euchre();

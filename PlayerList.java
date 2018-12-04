@@ -44,6 +44,11 @@ public class PlayerList {
 	 * @param playerNum - player to remove
 	 */
 	public static void removePlayer(int playerNum) {
+		int update = 1;
 		players.remove(playerNum);
+		for(Player x : players) {
+			x.playerNum = update;
+			update++;
+		}
 	}
 }

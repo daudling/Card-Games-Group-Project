@@ -5,7 +5,7 @@ public class Deck {
 	
 	private static Cards[][] deck = new Cards[4][13];
 	private static ImageIcon[][] visualDeck = new ImageIcon[4][13];
-	private static ImageIcon back;
+	private static ImageIcon back, blank;
 	private static Deck instance = null;
 	
 	/**
@@ -32,6 +32,7 @@ public class Deck {
 			}
 		}
 		back = new ImageIcon("Cards/FaceDown.png");
+		blank = new ImageIcon("Cards/Blank.png");
 		reset();
 	}
 	
@@ -167,6 +168,10 @@ public class Deck {
 	
 	public static ImageIcon getBack() {
 		return back;
+	}
+	
+	public static ImageIcon getBlank() {
+		return blank;
 	}
 	
 	public static ArrayList<Cards> getDeck() {

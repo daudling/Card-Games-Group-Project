@@ -112,7 +112,17 @@ public class GUI extends JPanel implements ActionListener {
 		layout.show(panel,"Menu");
 	}
 	
-	
+	private void falseEuchre() {
+		int update = 0;
+		for (Player x : PlayerList.players) {
+			update++;
+		}
+		while(update < 4) {
+			PlayerList.addPlayer();
+			PlayerList.players.get(update).difficulty = 1;
+			update++;
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -120,19 +130,30 @@ public class GUI extends JPanel implements ActionListener {
 		
 		if(source == exit){
 			System.exit(0);
-		}else if (source == blackJack){
+		}
+		else if (source == blackJack){
 			layout.show(panel,"BJ");
-		}else if (source == poker){
+		}
+		else if (source == poker){
 			layout.show(panel, "Game 2");
-		}else if (source == poker){
+		}
+		else if (source == euchre){
+			if(PlayerList.players.size() < 4) {
+				falseEuchre();
+			}
 			layout.show(panel, "Euchre");
-		}else if (source == goFish){
+		}
+		else if (source == goFish){
 			layout.show(panel, "Game 4");
-		}else if (source == backItem){
+		}
+		else if (source == backItem){
+			EuchreGUI.game.setGame(false);
 		    layout.show(panel, "Menu");
-		}else if (source == quitItem){
+		}
+		else if (source == quitItem){
 		    System.exit(0);
-		}else if (source == playerList) {
+		}
+		else if (source == playerList) {
 			layout.show(panel,  "Players");
 		}
 	}
@@ -153,7 +174,7 @@ public class GUI extends JPanel implements ActionListener {
 	    gui.setJMenuBar(menuB);
 	    menuB.add(fileMenu);
 	    
-	    GUI test = new GUI(1280,720,quitItem, backItem);
+	    GUI test = new GUI(2560,1440,quitItem, backItem);
 	    
 		gui.getContentPane().add(test);
 		

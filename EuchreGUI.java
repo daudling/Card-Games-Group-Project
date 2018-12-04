@@ -1,83 +1,110 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.swing.*;
 
 public class EuchreGUI extends JPanel implements ActionListener {
 	
-	private JLabel title;
-	public JButton one, two, three, four, five, start;
-	public JLabel lone, ltwo, lthree, lfour, lfive;
-	public JLabel tone, ttwo, tthree, tfour, tfive;
-	public JLabel rone, rtwo, rthree, rfour, rfive;
-	public JLabel bc, lc, tc, rc;
+	private JLabel title, flip;
+	public JButton start, yes, no;
+	public static ArrayList<JButton> bot = new ArrayList<JButton>();
+	public static ArrayList<JLabel> left = new ArrayList<JLabel>();
+	public static ArrayList<JLabel> top = new ArrayList<JLabel>();
+	public static ArrayList<JLabel> right = new ArrayList<JLabel>();
+	public ArrayList<JLabel> center = new ArrayList<JLabel>();
+	public JButton one = new JButton(), two = new JButton(), three = new JButton(), four = new JButton(), five = new JButton();
+	public JLabel lone = new JLabel(Deck.getBack()),
+			ltwo = new JLabel(Deck.getBack()),
+			lthree = new JLabel(Deck.getBack()),
+			lfour = new JLabel(Deck.getBack()),
+			lfive = new JLabel(Deck.getBack());
+	public JLabel tone = new JLabel(Deck.getBack()),
+			ttwo = new JLabel(Deck.getBack()),
+			tthree = new JLabel(Deck.getBack()),
+			tfour = new JLabel(Deck.getBack()),
+			tfive = new JLabel(Deck.getBack());
+	public JLabel rone = new JLabel(Deck.getBack()),
+			rtwo = new JLabel(Deck.getBack()),
+			rthree = new JLabel(Deck.getBack()),
+			rfour = new JLabel(Deck.getBack()),
+			rfive = new JLabel(Deck.getBack());
+	public JLabel bc = new JLabel(Deck.getBack()),
+			lc = new JLabel(Deck.getBack()),
+			tc = new JLabel(Deck.getBack()),
+			rc = new JLabel(Deck.getBack());
 	
-	Euchre game;
+	public static Euchre game;
+	private final ArrayList<Player> players = PlayerList.players;
 	
 	public EuchreGUI() {
 		game = new Euchre();
 		
-		setPreferredSize(new Dimension(1280, 720));
+		bot.add(one);
+		bot.add(two);
+		bot.add(three);
+		bot.add(four);
+		bot.add(five);
+		left.add(lone);
+		left.add(ltwo);
+		left.add(lthree);
+		left.add(lfour);
+		left.add(lfive);
+		top.add(tone);
+		top.add(ttwo);
+		top.add(tthree);
+		top.add(tfour);
+		top.add(tfive);
+		right.add(rone);
+		right.add(rtwo);
+		right.add(rthree);
+		right.add(rfour);
+		right.add(rfive);
+		center.add(bc);
+		center.add(lc);
+		center.add(tc);
+		center.add(rc);
+		
+		setPreferredSize(new Dimension(2560, 1440));
 		setLayout(new GridBagLayout());
 		GridBagConstraints loc = new GridBagConstraints();
 		setBackground(new Color(0, 102, 0));
 		
 		title = new JLabel("Euchre");
-		one = new JButton();
-		two = new JButton();
-		three = new JButton();
-		four = new JButton();
-		five = new JButton();
-		start = new JButton();
-		one.setVisible(false);
-		two.setVisible(false);
-		three.setVisible(false);
-		four.setVisible(false);
-		five.setVisible(false);
+		for(JButton x : bot) {
+			x.setIcon(Deck.getBack());
+			x.setVisible(true);
+			x.setBackground(new Color(0, 102, 0));
+		}
 		
-		lone = new JLabel(Deck.getBack());
-		ltwo = new JLabel(Deck.getBack());
-		lthree = new JLabel(Deck.getBack());
-		lfour = new JLabel(Deck.getBack());
-		lfive = new JLabel(Deck.getBack());
-		lone.setVisible(false);
-		ltwo.setVisible(false);
-		lthree.setVisible(false);
-		lfour.setVisible(false);
-		lfive.setVisible(false);
+		for(JLabel x : left) {
+			x.setVisible(true);
+		}
 		
-		tone = new JLabel(Deck.getBack());
-		ttwo = new JLabel(Deck.getBack());
-		tthree = new JLabel(Deck.getBack());
-		tfour = new JLabel(Deck.getBack());
-		tfive = new JLabel(Deck.getBack());
-		tone.setVisible(false);
-		ttwo.setVisible(false);
-		tthree.setVisible(false);
-		tfour.setVisible(false);
-		tfive.setVisible(false);
+		for(JLabel x : top) {
+			x.setVisible(true);
+		}
 		
-		rone = new JLabel(Deck.getBack());
-		rtwo = new JLabel(Deck.getBack());
-		rthree = new JLabel(Deck.getBack());
-		rfour = new JLabel(Deck.getBack());
-		rfive = new JLabel(Deck.getBack());
-		rone.setVisible(false);
-		rtwo.setVisible(false);
-		rthree.setVisible(false);
-		rfour.setVisible(false);
-		rfive.setVisible(false);
+		for(JLabel x : right) {
+			x.setVisible(true);
+		}
 		
-		bc = new JLabel(Deck.getBack());
-		lc = new JLabel(Deck.getBack());
-		tc = new JLabel(Deck.getBack());
-		rc = new JLabel(Deck.getBack());
-		bc.setVisible(false);
-		lc.setVisible(false);
-		tc.setVisible(false);
-		rc.setVisible(false);
+		for(JLabel x : center) {
+			x.setVisible(true);
+		}
 		
+		start = new JButton("START");
 		start.setVisible(true);
+		yes = new JButton("YES");
+		yes.setVisible(false);
+		yes.setEnabled(false);
+		no = new JButton("NO");
+		no.setVisible(false);
+		no.setEnabled(false);
+		flip = new JLabel(Deck.getBack());
+		flip.setVisible(false);
 		
 		loc.gridx = 0;
 		loc.gridy = 0;
@@ -86,67 +113,53 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		loc.gridx = 3;
 		loc.gridy = 3;
 		add(start, loc);
+		add(flip, loc);
+		loc.gridx = 2;
+		loc.gridy = 5;
+		add(yes, loc);
+		loc.gridx = 4;
+		add(no, loc);
 		
 		loc.gridx = 1;
 		loc.gridy = 7;
-		add(one, loc);
-		loc.gridx = 2;
-		add(two, loc);
-		loc.gridx = 3;
-		add(three, loc);
-		loc.gridx = 4;
-		add(four, loc);
-		loc.gridx = 5;
-		add(five, loc);
+		for(JButton x : bot) {
+			add(x, loc);
+			loc.gridx++;
+		}
 		
 		loc.gridx = 0;
 		loc.gridy = 1;
-		add(lone);
-		loc.gridy = 2;
-		add(ltwo);
-		loc.gridy = 3;
-		add(lthree);
-		loc.gridy = 4;
-		add(lfour);
-		loc.gridy = 5;
-		add(lfive);
+		for(JLabel x : left) {
+			add(x, loc);
+			loc.gridy++;
+		}
 		
 		loc.gridx = 1;
 		loc.gridy = 0;
-		add(tone, loc);
-		loc.gridx = 2;
-		add(ttwo, loc);
-		loc.gridx = 3;
-		add(tthree, loc);
-		loc.gridx = 4;
-		add(tfour, loc);
-		loc.gridx = 5;
-		add(tfive, loc);
+		for(JLabel x : top) {
+			add(x, loc);
+			loc.gridx++;
+		}
 		
 		loc.gridx = 7;
 		loc.gridy = 1;
-		add(rone, loc);
-		loc.gridy = 2;
-		add(rtwo, loc);
-		loc.gridy = 3;
-		add(rthree, loc);
-		loc.gridy = 4;
-		add(rfour, loc);
-		loc.gridy = 5;
-		add(rfive, loc);
+		for(JLabel x : right) {
+			add(x, loc);
+			loc.gridy++;
+		}
 		
 		loc.gridx = 3;
 		loc.gridy = 4;
-		add(bc, loc);
+		add(center.get(0), loc);
 		loc.gridx = 2;
-		loc.gridy = 4;
-		add(lc, loc);
+		loc.gridy = 3;
+		add(center.get(1), loc);
 		loc.gridx = 3;
 		loc.gridy = 2;
-		add(tc, loc);
+		add(center.get(2), loc);
 		loc.gridx = 4;
 		loc.gridy = 3;
-		add(rc, loc);
+		add(center.get(3), loc);
 		
 		one.addActionListener(this);
 		two.addActionListener(this);
@@ -154,6 +167,8 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		four.addActionListener(this);
 		five.addActionListener(this);
 		start.addActionListener(this);
+		yes.addActionListener(this);
+		no.addActionListener(this);
 	}
 
 	@Override
@@ -161,56 +176,50 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		Object source = e.getSource();
 		
 		if(source == one) {
-			
+			Euchre.input = Euchre.hand.get(0);
+			Euchre.decided = true;
 		}
 		else if(source == two) {
-			
+			Euchre.input = Euchre.hand.get(1);
+			Euchre.decided = true;
 		}
 		else if(source == three) {
-			
+			Euchre.input = Euchre.hand.get(2);
+			Euchre.decided = true;
 		}
 		else if(source == four) {
-			
+			Euchre.input = Euchre.hand.get(3);
+			Euchre.decided = true;
 		}
 		else if(source == five) {
-			
+			Euchre.input = Euchre.hand.get(4);
+			Euchre.decided = true;
 		}
 		else if(source == start) {
-			game.playEuchre();
+			try {
+				game.playEuchre();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else if(source == yes) {
+			Euchre.pickUp = true;
+			Euchre.decided = true;
+		}
+		else if(source == no) {
+			Euchre.pickUp = false;
+			Euchre.decided = true;
+		}
+	}
+	
+	public static void updateTable() {
+		for(JButton x : bot) {
 		}
 	}
 	
 	private void start() {
-		one.setVisible(true);
-		two.setVisible(true);
-		three.setVisible(true);
-		four.setVisible(true);
-		five.setVisible(true);
-		
-		lone.setVisible(true);
-		ltwo.setVisible(true);
-		lthree.setVisible(true);
-		lfour.setVisible(true);
-		lfive.setVisible(true);
-		
-		tone.setVisible(true);
-		ttwo.setVisible(true);
-		tthree.setVisible(true);
-		tfour.setVisible(true);
-		tfive.setVisible(true);
-		
-		rone.setVisible(true);
-		rtwo.setVisible(true);
-		rthree.setVisible(true);
-		rfour.setVisible(true);
-		rfive.setVisible(true);
-		
-		bc.setVisible(true);
-		lc.setVisible(true);
-		tc.setVisible(true);
-		rc.setVisible(true);
-		
 		start.setVisible(false);
-		start.disable();
+		start.setEnabled(false);
 	}
 }
