@@ -91,7 +91,7 @@ public class BlackJackGUI extends JPanel implements ActionListener {
         hitButton.addActionListener(this);
         stayButton.addActionListener(this);
         playButton.addActionListener(this);
-        setBackground(new Color(0,99,0));
+        setBackground(new Color(0,102,0));
 
 
     }

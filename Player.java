@@ -28,6 +28,10 @@ public class Player {
 		hand.remove(card);
 	}
 	
+	public void removeCard() {
+		
+	}
+	
 	/**
 	 * Adds random card to users hand to simulate drawing a card
 	 */

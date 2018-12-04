@@ -1,6 +1,3 @@
-
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +6,6 @@ import java.util.ArrayList;
 
 public class GUI extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	
 	
 	int width, height;
 	ArrayList<ImageIcon> visualCards = new ArrayList<ImageIcon>();
@@ -24,14 +20,15 @@ public class GUI extends JPanel implements ActionListener {
 	JButton playerList = new JButton("Player List");
 	JButton exit = new JButton("Exit");
 	
-	CardLayout layout = new CardLayout();
+	public static CardLayout layout = new CardLayout();
 	
-	JPanel panel;
+	public static JPanel panel;
 	JPanel game;
 	JPanel menu; 
 	JPanel blackJ; 
 	JPanel players;
 	JPanel Euchre;
+	JPanel pList;
 	
 	/*Creates an array list of image icons to use when displaying your cards. 
 	They should correspond to the way the cards are ordered in the Deck class 
@@ -66,6 +63,9 @@ public class GUI extends JPanel implements ActionListener {
 		panel = new JPanel();
 	    game = new  JPanel();
 	    menu = new JPanel();
+	    blackJ = new BlackJackGUI(visualCards);
+	    Euchre = new EuchreGUI();
+	    pList = new PlayerListGUI();
 		panel.setLayout(layout);
 		
 		
@@ -106,6 +106,7 @@ public class GUI extends JPanel implements ActionListener {
 		panel.add(game, "Game");
 		panel.add(blackJ,"BJ");
 		panel.add(Euchre, "Euchre");
+		panel.add(pList, "Players");
 		
 		add(panel);
 		layout.show(panel,"Menu");
@@ -132,25 +133,27 @@ public class GUI extends JPanel implements ActionListener {
 		}else if (source == quitItem){
 		    System.exit(0);
 		}else if (source == playerList) {
-			layout.show(panel,  "players");
+			layout.show(panel,  "Players");
 		}
 	}
 		
 	public static void main(String[] args) {
+		Deck.getInstance();
+		PlayerList.getInstance();
 		JFrame gui = new JFrame("Card game");
 		
 		
 		JMenuBar menuB = new JMenuBar();
 	    JMenu fileMenu = new JMenu("File");
 	    JMenuItem quitItem = new JMenuItem ("Exit");
-	    JMenuItem backItem = new JMenuItem ("Leave Game");
+	    JMenuItem backItem = new JMenuItem ("Main Menu");
 	    
 	    fileMenu.add(quitItem);
 	    fileMenu.add(backItem);
 	    gui.setJMenuBar(menuB);
 	    menuB.add(fileMenu);
 	    
-	    GUI test = new GUI(1080,720,quitItem, backItem);
+	    GUI test = new GUI(1280,720,quitItem, backItem);
 	    
 		gui.getContentPane().add(test);
 		

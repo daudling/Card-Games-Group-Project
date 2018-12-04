@@ -131,6 +131,9 @@ public class Euchre {
 				addPoints(2, 1);
 			}
 		}
+		if(team1 >= 10 || team2 >= 10) {
+			inGame = 1;
+		}
 	}
 	
 	/**
@@ -745,12 +748,43 @@ public class Euchre {
 		flipUp = Deck.pickRandom();
 		for(Player x : turnOrder) {
 			if(pickUpCard(x)) {
-				x.hand.add(flipUp);
-				x.removeCard(x.hand.get(0));
+				discard(x);
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public void discard(Player player) {
+		switch(player.difficulty) {
+		case 0: player.removeCard();
+		break;
+		case 1: discardCard(player);
+		break;
+		case 2: discardCard(player);
+		break;
+		case 3: discardCard(player);
+		break;
+		}
+	}
+	
+	public void discardCard(Player player) {
+		Cards temp = null;
+		for(Cards x : player.getHand()) {
+			if(temp == null) {
+				temp = x;
+			}
+			else if(isTrump(temp) && temp != leftBower) {
+				if(!isTrump(x) && x != leftBower) {
+					temp = x;
+				}
+			}
+			else if(x.rank < temp.rank) {
+				temp = x;
+			}
+		}
+		player.hand.add(flipUp);
+		player.hand.remove(temp);
 	}
 	
 	public void playEuchre() {

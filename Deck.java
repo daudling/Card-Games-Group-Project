@@ -1,8 +1,11 @@
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 public class Deck {
 	
 	private static Cards[][] deck = new Cards[4][13];
+	private static ImageIcon[][] visualDeck = new ImageIcon[4][13];
+	private static ImageIcon back;
 	private static Deck instance = null;
 	
 	/**
@@ -14,16 +17,21 @@ public class Deck {
 			for(int j = 0; j < 13; j++) {
 				switch(i) {
 				case 0: deck[i][j] = new Cards("Spades", j + 2);
+				visualDeck[i][j] = new ImageIcon("Cards/" + (j+2) + "_of_spades.png");
 				break;
 				case 1: deck[i][j] = new Cards("Clubs", j + 2);
+				visualDeck[i][j] = new ImageIcon("Cards/" + (j+2) + "_of_clubs.png");
 				break;
 				case 2: deck[i][j] = new Cards("Hearts", j + 2);
+				visualDeck[i][j] = new ImageIcon("Cards/" + (j+2) + "_of_hearts.png");
 				break;
 				case 3: deck[i][j] = new Cards("Diamonds", j + 2);
+				visualDeck[i][j] = new ImageIcon("Cards/" + (j+2) + "_of_diamonds.png");
 				break;
 				}
 			}
 		}
+		back = new ImageIcon("Cards/FaceDown.png");
 		reset();
 	}
 	
@@ -151,6 +159,14 @@ public class Deck {
 	
 	public static Cards getCard(int suit, int rank) {
 		return deck[suit][rank];
+	}
+	
+	public static ImageIcon getVisual(int suit, int rank) {
+		return visualDeck[suit][rank];
+	}
+	
+	public static ImageIcon getBack() {
+		return back;
 	}
 	
 	public static ArrayList<Cards> getDeck() {

@@ -21,6 +21,9 @@ public class PlayerList {
 	public static PlayerList getInstance() {
 		if(instance == null) {
 			instance = new PlayerList();
+			for(int i = 0; i < 4; i++) {
+				addPlayer();
+			}
 		}
 		return instance;
 	}
@@ -29,22 +32,18 @@ public class PlayerList {
 	 * Adds new player to player list
 	 * @param newPlayer - player to add
 	 */
-	public void addPlayer(Player newPlayer) {
+	public static void addPlayer() {
 		if(players.size() == 4) {
 			return;
 		}
-		players.add(newPlayer);
+		players.add(new Player());
 	}
 	
 	/**
 	 * Removes existing player from player list
 	 * @param playerNum - player to remove
 	 */
-	public void removePlayer(int playerNum) {
-		for(Player x : players) {
-			if(x.playerNum == playerNum) {
-				players.remove(x);
-			}
-		}
+	public static void removePlayer(int playerNum) {
+		players.remove(playerNum);
 	}
 }
