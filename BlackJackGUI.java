@@ -1,4 +1,4 @@
-import javax.swing.*;
+import javax.swing.*;  
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -167,24 +167,39 @@ public class BlackJackGUI extends JPanel implements ActionListener {
         
         if(source == playButton && isTurn == false){
             Deck.getInstance();
-            int amt = Integer.parseInt(wager.getText());
-            game.playGameGUIUser(amt);
-            displayCards();
-            dealerHand.get(1).setIcon(visualDeck.get(52));
-            isTurn = true;
+            try{
+                int amt = Integer.parseInt(wager.getText());
+                if(game.user.money > amt){
+                    if (amt < 0)
+                        throw new IllegalArgumentException();
+                    game.playGameGUIUser(amt);
+                    displayCards();
+                    dealerHand.get(1).setIcon(visualDeck.get(52));
+                    isTurn = true;
+                }else{
+                   JOptionPane.showMessageDialog(null, "You cannot bet more than what you have!");
+                }
+            }catch(Exception p){
+                JOptionPane.showMessageDialog(null, "Please insert a  positive number.");
+            }
         }
         
-        else if(source == hitButton && isTurn == true){
+        if(source == hitButton && isTurn == true){
             if(game.calcHand(game.user) <= LIMIT)
                 game.hit(user);
             displayCards();
             dealerHand.get(1).setIcon(visualDeck.get(52));
         }
-        else if((source == stayButton || game.calcHand(game.user) > LIMIT) && isTurn == true){
+        if((source == stayButton || game.calcHand(game.user) > LIMIT) && isTurn == true){
             game.playGameGUIDealer(amt);
             if(game.calcHand(game.user) < LIMIT)
                 displayCards();
+            if(game.calcHand(game.dealer) <= LIMIT)
+                game.results(game.checkWinner(), game.isTie);
+            else
+                game.results(true,false);
             
+            user.money = game.money;
             money.setText("Money:" + user.money);
             game.reset();
             isTurn = false;
