@@ -1,14 +1,11 @@
-
-
-
-
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class BlackJack {
     private final int LIMIT = 21;
-    private boolean isTie = false;
+    public boolean isTie = false;
     boolean isStay = false;
-    private int money = 1000;
+    public int money = 1000;
     private int wager;
     private String ans = "";
     private Player dealer = new Player();
@@ -42,26 +39,30 @@ public class BlackJack {
     }
 
     public boolean checkWinner(){
-        if(calcHand(user) == calcHand(dealer))
-            isTie = true;
+        if(calcHand(user) <= LIMIT){
+            if(calcHand(user) == calcHand(dealer))
+                isTie = true;
 
-        if(calcHand(user) > calcHand(dealer))
-            return true;
+            if(calcHand(user) > calcHand(dealer))
+                return true;
+            else
+                return false;	
+        }
         else
-            return false;	
+            return false;
     }
 
     public void results(boolean isWin, boolean tie){
         if(isWin){
-            System.out.println("YOU WIN! You've gained " + wager + "$");
+            JOptionPane.showMessageDialog(null,"YOU WIN! You've gained " + wager + "$");
             money += wager;
         }
         else if(!isWin && !tie){
-            System.out.println("YOU LOSE! You've lost " + wager + "$");
+            JOptionPane.showMessageDialog(null,"YOU LOSE! You've lost " + wager + "$");
             money -= wager;
         }
         else{ 
-            System.out.println("YOU TIED! Your bet was returned");
+            JOptionPane.showMessageDialog(null,"YOU TIED! Your bet was returned");
             money += 0;
         }
     }
@@ -145,10 +146,7 @@ public class BlackJack {
 
         System.out.println("MONEY:" + money);
         ans = "";
-        user.hand = null;
-        dealer.hand = null;
-        isStay = false;
-        isTie = false;
+        reset();
 
     }
 
@@ -183,12 +181,6 @@ public class BlackJack {
         dealer.addHand(1);
         user.addHand(2);
         wager = bet;
-
-        user.displayHand();
-        System.out.println("User:" + calcHand(user));
-        dealer.displayHand();
-        System.out.println("Dealer:" + calcHand(dealer));
-        
     }
     public void playGameGUIDealer(int bet){    
         isStay = false;
@@ -199,32 +191,24 @@ public class BlackJack {
                 if(calcHand(user) <= calcHand(dealer))
                     isStay = true;
             }
-
-            user.displayHand();
-            System.out.println("User:" + calcHand(user));
-            dealer.displayHand();
-            System.out.println("Dealer:" + calcHand(dealer));
-
-            if(calcHand(dealer) <= LIMIT)
-                results(checkWinner(), isTie);
-            else
-                results(true,false);
+//            if(calcHand(dealer) <= LIMIT)
+//                results(checkWinner(), isTie);
+//            else
+//                results(true,false);
         }
-        else
-            results(false,false);
-
-        System.out.println("MONEY:" + money);
+        //user.money = money;
+    }
+    
+    public void reset(){
         user.hand = null;
         dealer.hand = null;
         isStay = false;
         isTie = false;
-
     }
-
-//    public static void main(String [] args){
-//        Deck.getInstance();
-//        BlackJack eGame = new BlackJack();
-//        eGame.playBlackJack();
-//    }
+    
+    public static void main(String [] args){
+        Deck.getInstance();
+        BlackJack eGame = new BlackJack();
+        eGame.playBlackJack();
+    }
 }
-
