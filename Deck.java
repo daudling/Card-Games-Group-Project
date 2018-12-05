@@ -162,8 +162,18 @@ public class Deck {
 		return deck[suit][rank];
 	}
 	
-	public static ImageIcon getVisual(int suit, int rank) {
-		return visualDeck[suit][rank];
+	public static ImageIcon getVisual(String suit, int rank) {
+		int suitRank = 0;
+		switch(suit) {
+		case "Spades": suitRank = 0;
+		break;
+		case "Clubs": suitRank = 1;
+		break;
+		case "Hearts": suitRank = 2;
+		break;
+		case "Diamonds": suitRank = 3;
+		}
+		return visualDeck[suitRank][rank];
 	}
 	
 	public static ImageIcon getBack() {

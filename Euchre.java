@@ -9,8 +9,8 @@ public class Euchre {
 	private ArrayList<Cards> table = new ArrayList<Cards>();
 	private ArrayList<Player> turnOrder = new ArrayList<Player>();
 	
-	public static Cards input = null;
-	public static boolean decided = false, pickUp = false;
+	public  Cards input = null;
+	public  boolean decided = false, pickUp = false;
 	public static ArrayList<Cards> hand = null;
 	
 	public void setTrump(String trump) {
@@ -68,7 +68,7 @@ public class Euchre {
 	 * @param team2 - the number of rounds won by the team in the match
 	 * @throws InterruptedException 
 	 */
-	public void turn(int r, int team1, int team2) throws InterruptedException {
+	public void turn(int r, int team1, int team2){
 		table.clear();
 		Cards temp, high = null;
 		int playerHigh = 0;
@@ -151,12 +151,11 @@ public class Euchre {
 	 * @return - the card the current player chose.
 	 * @throws InterruptedException 
 	 */
-	public Cards chooseCard(Player player) throws InterruptedException {
+	public Cards chooseCard(Player player){
 		decided = false;
 		Cards temp = new Cards();
 		switch(player.difficulty) {
 		case 0: while(decided == false) {
-			Thread.sleep(100);
 		}
 		temp = input;
 		break;
@@ -176,12 +175,11 @@ public class Euchre {
 	 * @return - the players choice if they want to pick it up or not.
 	 * @throws InterruptedException 
 	 */
-	public boolean pickUpCard(Player player) throws InterruptedException {
+	public boolean pickUpCard(Player player){
 		decided = false;
 		switch(player.difficulty) {
 		case 0: hand = player.hand;
-			while(decided = false) {
-			Thread.sleep(100);
+			while(decided == false) {
 		}
 		if(pickUp = true) {
 			return true;
@@ -761,8 +759,11 @@ public class Euchre {
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	public boolean startRound() throws InterruptedException {
+	public boolean startRound(){
 		flipUp = Deck.pickRandom();
+		EuchreGUI.flip.setIcon(Deck.getVisual(flipUp.suit, flipUp.rank));
+		EuchreGUI.yes.setVisible(true);
+		EuchreGUI.no.setVisible(true);
 		for(Player x : turnOrder) {
 			if(pickUpCard(x)) {
 				discard(x);
@@ -772,11 +773,10 @@ public class Euchre {
 		return false;
 	}
 	
-	public void discard(Player player) throws InterruptedException {
+	public void discard(Player player){
 		decided = false;
 		switch(player.difficulty) {
 		case 0: while(decided == false) {
-			Thread.sleep(100);
 		}
 		player.hand.remove(input);
 		break;
@@ -817,7 +817,7 @@ public class Euchre {
 		}
 	}
 	
-	public void playEuchre() throws InterruptedException {
+	public void playEuchre(){
 		setGame(true);
 		resetTable();
 		setOrder();

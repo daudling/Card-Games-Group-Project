@@ -123,6 +123,17 @@ public class GUI extends JPanel implements ActionListener {
 			update++;
 		}
 	}
+	
+	private void falseBlackjack() {
+		int update = 0;
+		for(Player x : PlayerList.players) {
+			update++;
+		}
+		while(update < 2) {
+			PlayerList.addPlayer();
+			update++;
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {

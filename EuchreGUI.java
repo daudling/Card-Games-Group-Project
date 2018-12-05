@@ -8,8 +8,9 @@ import javax.swing.*;
 
 public class EuchreGUI extends JPanel implements ActionListener {
 	
-	private JLabel title, flip;
-	public JButton start, yes, no;
+	private JLabel title;
+	public static JLabel flip;
+	public static JButton start, yes, no;
 	public static ArrayList<JButton> bot = new ArrayList<JButton>();
 	public static ArrayList<JLabel> left = new ArrayList<JLabel>();
 	public static ArrayList<JLabel> top = new ArrayList<JLabel>();
@@ -37,7 +38,7 @@ public class EuchreGUI extends JPanel implements ActionListener {
 			rc = new JLabel(Deck.getBack());
 	
 	public static Euchre game;
-	private final ArrayList<Player> players = PlayerList.players;
+	private static ArrayList<Cards> hand;
 	
 	public EuchreGUI() {
 		game = new Euchre();
@@ -73,6 +74,8 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		setBackground(new Color(0, 102, 0));
 		
 		title = new JLabel("Euchre");
+		flip = new JLabel(Deck.getBack());
+		flip.setVisible(false);
 		for(JButton x : bot) {
 			x.setIcon(Deck.getBack());
 			x.setVisible(true);
@@ -176,50 +179,72 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		Object source = e.getSource();
 		
 		if(source == one) {
-			Euchre.input = Euchre.hand.get(0);
-			Euchre.decided = true;
+			game.input = Euchre.hand.get(0);
+			game.decided = true;
 		}
 		else if(source == two) {
-			Euchre.input = Euchre.hand.get(1);
-			Euchre.decided = true;
+			game.input = Euchre.hand.get(1);
+			game.decided = true;
 		}
 		else if(source == three) {
-			Euchre.input = Euchre.hand.get(2);
-			Euchre.decided = true;
+			game.input = Euchre.hand.get(2);
+			game.decided = true;
 		}
 		else if(source == four) {
-			Euchre.input = Euchre.hand.get(3);
-			Euchre.decided = true;
+			game.input = Euchre.hand.get(3);
+			game.decided = true;
 		}
 		else if(source == five) {
-			Euchre.input = Euchre.hand.get(4);
-			Euchre.decided = true;
+			game.input = Euchre.hand.get(4);
+			game.decided = true;
 		}
 		else if(source == start) {
-			try {
-				game.playEuchre();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			start();
+			game.setGame(true);
+			game.playEuchre();
 		}
 		else if(source == yes) {
-			Euchre.pickUp = true;
-			Euchre.decided = true;
+			game.pickUp = true;
+			game.decided = true;
+			flip.setVisible(false);
 		}
 		else if(source == no) {
-			Euchre.pickUp = false;
-			Euchre.decided = true;
+			game.pickUp = false;
+			game.decided = true;
+			flip.setVisible(false);
 		}
 	}
 	
 	public static void updateTable() {
+		int update = 0;
 		for(JButton x : bot) {
+			hand = PlayerList.players.get(0).getHand();
+			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
+			update++;
+		}
+		for(JLabel x : left) {
+			hand = PlayerList.players.get(0).getHand();
+			update = 0;
+			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
+			update++;
+		}
+		for(JLabel x : top) {
+			hand = PlayerList.players.get(0).getHand();
+			update = 0;
+			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
+			update++;
+		}
+		for(JLabel x : right) {
+			hand = PlayerList.players.get(0).getHand();
+			update = 0;
+			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
+			update++;
 		}
 	}
 	
 	private void start() {
 		start.setVisible(false);
 		start.setEnabled(false);
+		flip.setVisible(true);
 	}
 }
