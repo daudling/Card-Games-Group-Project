@@ -5,19 +5,19 @@ import java.util.ArrayList;
 public class Player {
 	
 	public ArrayList<Cards> hand;
-	public int playerNum, wins, losses, difficulty, team;
+	public int playerNum, wins, losses, difficulty, team, money;
 	
 	/**
 	 * Constructor
-	 * @param player - Player number
 	 */
-	public Player(int player) {
-		playerNum = player;
+	public Player() {
+		playerNum = PlayerList.players.size() + 1;
 		hand = new ArrayList<Cards>();
 		wins = 0;
 		losses = 0;
 		difficulty = 0;
 		team = 0;
+		money = 0;
 	}
 	
 	/**
@@ -26,6 +26,10 @@ public class Player {
 	 */
 	public void removeCard(Cards card) {
 		hand.remove(card);
+	}
+	
+	public void removeCard() {
+		
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-import javax.swing.*;  
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,8 +33,8 @@ public class BlackJackGUI extends JPanel implements ActionListener {
     private ArrayList<ImageIcon> visualDeck;
 
 
-    public BlackJackGUI(Player player, ArrayList<ImageIcon> vDeck){
-        user = player;
+    public BlackJackGUI(ArrayList<ImageIcon> vDeck){
+        user = PlayerList.players.get(0);
         game = new BlackJack(user);
         
         visualDeck = vDeck;
@@ -110,7 +110,7 @@ public class BlackJackGUI extends JPanel implements ActionListener {
         hitButton.addActionListener(this);
         stayButton.addActionListener(this);
         playButton.addActionListener(this);
-        setBackground(new Color(0,99,0));  //Sets the background to a dark green color.
+        setBackground(new Color(0,102,0));
     }
     
     

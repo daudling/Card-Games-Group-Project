@@ -1,6 +1,3 @@
-
-package project;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,26 +7,28 @@ import java.util.ArrayList;
 public class GUI extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
-	
 	int width, height;
-	Player test = new Player(0);
 	ArrayList<ImageIcon> visualCards = new ArrayList<ImageIcon>();
 	//Deck playDeck = new Deck();
 	JMenuItem quitItem;
 	JMenuItem backItem;
 	
-	JButton game1 = new JButton("Black Jack");
-	JButton game2 = new JButton("Poker");
-	JButton game3 = new JButton("Euchre");
-	JButton game4 = new JButton("Go Fish!");
+	JButton blackJack = new JButton("Black Jack");
+	JButton poker = new JButton("Poker");
+	JButton euchre = new JButton("Euchre");
+	JButton goFish = new JButton("Go Fish!");
+	JButton playerList = new JButton("Player List");
 	JButton exit = new JButton("Exit");
 	
-	CardLayout layout = new CardLayout();
+	public static CardLayout layout = new CardLayout();
 	
-	JPanel panel;
+	public static JPanel panel;
 	JPanel game;
 	JPanel menu; 
 	JPanel blackJ; 
+	JPanel players;
+	JPanel Euchre;
+	JPanel pList;
 	
 	/*Creates an array list of image icons to use when displaying your cards. 
 	They should correspond to the way the cards are ordered in the Deck class 
@@ -64,7 +63,9 @@ public class GUI extends JPanel implements ActionListener {
 		panel = new JPanel();
 	    game = new  JPanel();
 	    menu = new JPanel();
-	    blackJ = new BlackJackGUI(test,visualCards);
+	    blackJ = new BlackJackGUI(visualCards);
+	    Euchre = new EuchreGUI();
+	    pList = new PlayerListGUI();
 		panel.setLayout(layout);
 		
 		
@@ -82,32 +83,57 @@ public class GUI extends JPanel implements ActionListener {
 	}
 	
 	private void addButtons(){
-		game1.addActionListener(this);
-		game2.addActionListener(this);
-		game3.addActionListener(this);
-		game4.addActionListener(this);
+		blackJack.addActionListener(this);
+		poker.addActionListener(this);
+		euchre.addActionListener(this);
+		goFish.addActionListener(this);
+		playerList.addActionListener(this);
 		exit.addActionListener(this);
 		quitItem.addActionListener(this);
 		backItem.addActionListener(this);
 		
-		menu.add(game1);
-		menu.add(game2);
-		menu.add(game3);
-		menu.add(game4);
+		menu.add(blackJack);
+		menu.add(poker);
+		menu.add(euchre);
+		menu.add(goFish);
+		menu.add(playerList);
 		menu.add(exit);
 		
-		game.setBackground(Color.GREEN);
-		menu.setBackground(Color.BLUE);
+		game.setBackground(new Color(0, 102, 0));
+		menu.setBackground(new Color(0, 102, 0));
 		
 		panel.add(menu,"Menu");
 		panel.add(game, "Game");
 		panel.add(blackJ,"BJ");
+		panel.add(Euchre, "Euchre");
+		panel.add(pList, "Players");
 		
 		add(panel);
 		layout.show(panel,"Menu");
 	}
 	
+	private void falseEuchre() {
+		int update = 0;
+		for (Player x : PlayerList.players) {
+			update++;
+		}
+		while(update < 4) {
+			PlayerList.addPlayer();
+			PlayerList.players.get(update).difficulty = 1;
+			update++;
+		}
+	}
 	
+	private void falseBlackjack() {
+		int update = 0;
+		for(Player x : PlayerList.players) {
+			update++;
+		}
+		while(update < 2) {
+			PlayerList.addPlayer();
+			update++;
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -115,41 +141,59 @@ public class GUI extends JPanel implements ActionListener {
 		
 		if(source == exit){
 			System.exit(0);
-		}else if (source == game1){
+		}
+		else if (source == blackJack){
 			layout.show(panel,"BJ");
-		}else if (source == game2){
+		}
+		else if (source == poker){
 			layout.show(panel, "Game 2");
-		}else if (source == game2){
-			layout.show(panel, "Game 3");
-		}else if (source == game4){
+		}
+		else if (source == euchre){
+			if(PlayerList.players.size() < 4) {
+				falseEuchre();
+			}
+			euchre.removeAll();
+			euchre.revalidate();
+			euchre.repaint();
+			layout.show(panel, "Euchre");
+		}
+		else if (source == goFish){
 			layout.show(panel, "Game 4");
-		}else if (source == backItem){
+		}
+		else if (source == backItem){
+			EuchreGUI.game.setGame(false);
 		    layout.show(panel, "Menu");
-		}else if (source == quitItem){
+		}
+		else if (source == quitItem){
 		    System.exit(0);
+		}
+		else if (source == playerList) {
+			layout.show(panel,  "Players");
 		}
 	}
 		
 	public static void main(String[] args) {
+		Deck.getInstance();
+		PlayerList.getInstance();
 		JFrame gui = new JFrame("Card game");
 		
 		
 		JMenuBar menuB = new JMenuBar();
 	    JMenu fileMenu = new JMenu("File");
 	    JMenuItem quitItem = new JMenuItem ("Exit");
-	    JMenuItem backItem = new JMenuItem ("Leave Game");
+	    JMenuItem backItem = new JMenuItem ("Main Menu");
 	    
 	    fileMenu.add(quitItem);
 	    fileMenu.add(backItem);
 	    gui.setJMenuBar(menuB);
 	    menuB.add(fileMenu);
 	    
-	    GUI test = new GUI(400,500,quitItem, backItem);
+	    GUI test = new GUI(2560,1440,quitItem, backItem);
 	    
 		gui.getContentPane().add(test);
 		
 		gui.setSize(test.getWidth(), test.getHeight());
-		gui.setResizable(false);
+		gui.setResizable(true);
 		gui.setLocationRelativeTo(null);
 		gui.setVisible(true);
 		gui.setTitle("Card Games!");
