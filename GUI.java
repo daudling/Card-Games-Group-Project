@@ -152,6 +152,9 @@ public class GUI extends JPanel implements ActionListener {
 			if(PlayerList.players.size() < 4) {
 				falseEuchre();
 			}
+			euchre.removeAll();
+			euchre.revalidate();
+			euchre.repaint();
 			layout.show(panel, "Euchre");
 		}
 		else if (source == goFish){
@@ -190,7 +193,7 @@ public class GUI extends JPanel implements ActionListener {
 		gui.getContentPane().add(test);
 		
 		gui.setSize(test.getWidth(), test.getHeight());
-		gui.setResizable(false);
+		gui.setResizable(true);
 		gui.setLocationRelativeTo(null);
 		gui.setVisible(true);
 		gui.setTitle("Card Games!");

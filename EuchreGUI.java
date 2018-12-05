@@ -215,30 +215,62 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		}
 	}
 	
+	public static void resetGame() {
+		for(Player x : PlayerList.players) {
+			x.hand.clear();
+			game.resetTable();
+			updateTable();
+		}
+	}
+	
 	public static void updateTable() {
-		int update = 0;
+		int counter = 0;
+		hand = PlayerList.players.get(0).getHand();
 		for(JButton x : bot) {
-			hand = PlayerList.players.get(0).getHand();
-			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
-			update++;
+			if(counter < hand.size()) {
+				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
+			}
+			counter++;
 		}
+		while(counter < 5) {
+			bot.get(counter).setIcon(Deck.getBack());
+			counter++;
+		}
+		counter = 0;
+		hand = PlayerList.players.get(1).getHand();
 		for(JLabel x : left) {
-			hand = PlayerList.players.get(0).getHand();
-			update = 0;
-			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
-			update++;
+			if(counter < hand.size()) {
+				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
+			}
+			counter++;
 		}
+		while(counter < 5) {
+			left.get(counter).setIcon(Deck.getBack());
+			counter++;
+		}
+		counter = 0;
+		hand = PlayerList.players.get(2).getHand();
 		for(JLabel x : top) {
-			hand = PlayerList.players.get(0).getHand();
-			update = 0;
-			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
-			update++;
+			if(counter < hand.size()) {
+				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
+			}
+			counter++;
 		}
+		while(counter < 5) {
+			top.get(counter).setIcon(Deck.getBack());
+			counter++;
+		}
+		counter = 0;
+		hand = PlayerList.players.get(3).getHand();
 		for(JLabel x : right) {
-			hand = PlayerList.players.get(0).getHand();
-			update = 0;
-			x.setIcon(Deck.getVisual(hand.get(update).suit, hand.get(update).rank));
-			update++;
+			if(counter < hand.size()) {
+				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
+			}
+			counter++;
+		}
+		while(counter < 5) {
+			right.get(counter).setIcon(Deck.getBack());
+			counter++;
 		}
 	}
 	

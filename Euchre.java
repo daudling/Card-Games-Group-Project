@@ -727,10 +727,9 @@ public class Euchre {
 	 * Sets the order of turns for first round
 	 */
 	public void setOrder() {
-		if(turnOrder.isEmpty()) {
-			for(Player x : PlayerList.players) {
-				turnOrder.add(x);
-			}
+		turnOrder.clear();
+		for(Player x : PlayerList.players) {
+			turnOrder.add(x);
 		}
 	}
 	
@@ -761,15 +760,19 @@ public class Euchre {
 	 */
 	public boolean startRound(){
 		flipUp = Deck.pickRandom();
-		EuchreGUI.flip.setIcon(Deck.getVisual(flipUp.suit, flipUp.rank));
+		EuchreGUI.flip.setIcon(Deck.getVisual(flipUp.suit, flipUp.rank - 2));
 		EuchreGUI.yes.setVisible(true);
 		EuchreGUI.no.setVisible(true);
+		EuchreGUI.updateTable();
 		for(Player x : turnOrder) {
 			if(pickUpCard(x)) {
 				discard(x);
 				return true;
 			}
 		}
+		EuchreGUI.yes.setVisible(false);
+		EuchreGUI.no.setVisible(false);
+		EuchreGUI.flip.setVisible(false);
 		return false;
 	}
 	
@@ -828,6 +831,7 @@ public class Euchre {
 			}
 			x.addHand(NUM_CARDS);
 		}
+		EuchreGUI.updateTable();
 		if(startRound()) {
 			while(inGame == 0) {
 				turn(0, 0, 0);
