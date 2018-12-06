@@ -8,8 +8,8 @@ public class BlackJack {
     public int money = 1000;
     private int wager;
     private String ans = "";
-    private Player dealer = new Player();
-    private Player user;
+    Player dealer = new Player();
+    Player user;
     private Scanner scnr = new Scanner(System.in);
 
     public int getMoney(){

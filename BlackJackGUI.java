@@ -35,11 +35,12 @@ public class BlackJackGUI extends JPanel implements ActionListener {
 
     public BlackJackGUI(ArrayList<ImageIcon> vDeck){
         user = PlayerList.players.get(0);
+        user.money = 1000;
         game = new BlackJack(user);
         
         visualDeck = vDeck;
         
-        setPreferredSize(new Dimension(800,600));
+        setPreferredSize(new Dimension(1280,720));
         
         setLayout(new GridBagLayout());
         GridBagConstraints loc = new GridBagConstraints();
