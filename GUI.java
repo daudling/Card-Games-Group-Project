@@ -37,13 +37,13 @@ public class GUI extends JPanel implements ActionListener {
 	    for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 13; j++) {
                 switch(i) {
-                case 0: visualCards.add(new ImageIcon((j+2)+ "_of_spades.png"));
+                case 0: visualCards.add(new ImageIcon("Cards/" + (j+2)+ "_of_spades.png"));
                 break;
-                case 1: visualCards.add(new ImageIcon((j+2)+ "_of_clubs.png"));
+                case 1: visualCards.add(new ImageIcon("Cards/" + (j+2)+ "_of_clubs.png"));
                 break;
-                case 2: visualCards.add(new ImageIcon((j+2)+ "_of_hearts.png"));
+                case 2: visualCards.add(new ImageIcon("Cards/" + (j+2)+ "_of_hearts.png"));
                 break;
-                case 3: visualCards.add(new ImageIcon((j+2)+ "_of_diamonds.png"));
+                case 3: visualCards.add(new ImageIcon("Cards/" + (j+2)+ "_of_diamonds.png"));
                 break;
                 }
             }
