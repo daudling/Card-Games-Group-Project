@@ -1,4 +1,4 @@
-import javax.swing.*;
+import javax.swing.*; 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -115,7 +115,9 @@ public class BlackJackGUI extends JPanel implements ActionListener {
     }
     
     
-    //What I use to display the cards.
+    /**
+     * Displays the cards that the user and dealer has in their hands.
+     */
     public void displayCards(){
         int cardID;
         int suitMultiplyer = 1;
@@ -124,6 +126,8 @@ public class BlackJackGUI extends JPanel implements ActionListener {
         int handSize = game.user.hand.size();
         userAmt.setText("You: " + game.calcHand(game.user));
         dealerAmt.setText("Dealer: " + game.calcHand(game.dealer));
+        
+        //Shows what the user's cards are.
         for(int i = 0; i < handSize; i++){
             switch(game.user.hand.get(i).suit){
             case "Spades": suitMultiplyer = 0;
@@ -142,6 +146,8 @@ public class BlackJackGUI extends JPanel implements ActionListener {
         for(int j = handSize; j < 7; j++){
             playerHand.get(j).setIcon(visualDeck.get(53));
         }
+        
+        //Shows what the dealer's cards are.
         handSize = game.dealer.hand.size();
         
         for(int i = 0; i < handSize; i++){
@@ -163,9 +169,12 @@ public class BlackJackGUI extends JPanel implements ActionListener {
             dealerHand.get(j).setIcon(visualDeck.get(53));
         }
     }
+    
+    
     public void actionPerformed(ActionEvent e){
         Object source = e.getSource();
         
+        //Play Button - Starts the game if the wager is correct.
         if(source == playButton && isTurn == false){
             Deck.getInstance();
             try{
@@ -185,12 +194,15 @@ public class BlackJackGUI extends JPanel implements ActionListener {
             }
         }
         
+        //Hit Button - Gives the user a card.
         if(source == hitButton && isTurn == true){
             if(game.calcHand(game.user) <= LIMIT)
                 game.hit(user);
             displayCards();
             dealerHand.get(1).setIcon(visualDeck.get(52));
         }
+        
+        //Stay Button - Makes the user stay and does the dealer's turn.
         if((source == stayButton || game.calcHand(game.user) > LIMIT) && isTurn == true){
             game.playGameGUIDealer(amt);
             if(game.calcHand(game.user) < LIMIT)
@@ -220,3 +232,4 @@ public class BlackJackGUI extends JPanel implements ActionListener {
 //    }
 
 }
+
