@@ -4,17 +4,17 @@ import java.util.Scanner;
 public class Poker {
 
 	private static int chips = 500;
-	private double pot;
-	private int bet;
+	 double pot;
+	int bet;
 	private double score = 0;
 	private int totalBet = 0;
 	private int tableBet = 0;
-	private Player dealer = new Player(0);
-	private Player p1 = new Player(1);
+	Player dealer = new Player(0);
+	Player p1 = new Player(1);
 	Cards[] finale = new Cards[7];
 	private static Scanner scan = new Scanner(System.in);
 	private static String action = "";
-	private boolean fold = false;
+	boolean fold = false;
 	private int singles = 0, pairs = 0, triples = 0, quads = 0;
 	int[] rankCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	int[] suitCount = { 0, 0, 0, 0 };
@@ -123,11 +123,22 @@ public class Poker {
 		System.out.println();
 		p1.displayHand();
 		result();
+		if(score == 0){
+		System.out.println("Chips lost: " + pot);
+		}else{
 		chips += pot * ((score / 10) + 1);
 		System.out.println("winnings: " + pot * ((score / 10) + 1));
+		}
+		pot=0;
+		
 	}
 
 	public void contains() {
+		quads = 0;
+		triples = 0;
+		pairs = 0;
+		
+		
 		for (int i = 0; i < rankCount.length; i++) {
 			if (rankCount[i] == 4) {
 				quads++;
@@ -137,9 +148,17 @@ public class Poker {
 				pairs++;
 			}
 		}
+		
 	}
 
 	public void counter() {
+		for (int i = 0; i < rankCount.length; i++) {
+			rankCount[i] = 0;
+		}
+		for (int i = 0; i < suitCount.length; i++) {
+			suitCount[i] = 0;
+		}
+		
 
 		for (int i = 0; i < finale.length; i++) {
 			rankCount[finale[i].getRank()]++;
@@ -170,17 +189,16 @@ public class Poker {
 				flush = true;
 			}
 		}
-		for (int i = 0; i < rankCount.length; i++) {
+		for (int i = 0; i < rankCount.length - 1; i++) {
 			if (sequence != 5) {
 				if (rankCount[i] != 0 && rankCount[i + 1] != 0) {
 					sequence++;
 				} else {
 					sequence = 1;
 				}
-			} else {
+			} else if(sequence == 5) {
 				straight = true;
-			}
-		}
+		}}
 
 		if (flush && straight) {
 			System.out.println("Straight Flush!");
@@ -209,8 +227,8 @@ public class Poker {
 		} else {
 			System.out.println("Too Bad!");
 			score = 0;
-		}
-	}
+		}}
+	
 
 	public static void main(String[] args) {
 		Deck.getInstance();
