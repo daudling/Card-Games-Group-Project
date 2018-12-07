@@ -11,6 +11,7 @@ public class Deck {
 	/**
 	 * Populates deck with 52 Cards objects, one for each card.
 	 * Sets quantity of each object to 0.
+	 * Populates second "visualDeck" to get image references for each card and provides blank/back image
 	 */
 	private Deck() {
 		for(int i = 0; i < 4; i++) {
@@ -160,6 +161,26 @@ public class Deck {
 	
 	public static Cards getCard(int suit, int rank) {
 		return deck[suit][rank];
+	}
+	
+	public static Cards getCard(String suit, int rank) {
+		switch(suit) {
+		case "Spades": return deck[0][rank];
+		case "Clubs": return deck[1][rank];
+		case "Hearts": return deck[2][rank];
+		case "Diamonds": return deck[3][rank];
+		}
+		return null;
+	}
+	
+	public static Cards getLeft(String suit) {
+		switch(suit) {
+		case "Spades": return deck[1][9];
+		case "Clubs": return deck[0][9];
+		case "Hearts": return deck[3][9];
+		case "Diamonds": return deck[2][9];
+		}
+		return null;
 	}
 	
 	public static ImageIcon getVisual(String suit, int rank) {

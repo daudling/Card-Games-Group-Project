@@ -171,6 +171,9 @@ public class PlayerListGUI extends JPanel implements ActionListener {
 		else if(source == back) {
 			GUI.layout.show(GUI.panel,  "Menu");
 		}
+		else if(source == player) {
+			d = 0;
+		}
 		else if(source == easy) {
 			d = 1;
 		}

@@ -188,7 +188,7 @@ public class GUI extends JPanel implements ActionListener {
 	    gui.setJMenuBar(menuB);
 	    menuB.add(fileMenu);
 	    
-	    GUI test = new GUI(2560,1440,quitItem, backItem);
+	    GUI test = new GUI(1920,1080,quitItem, backItem);
 	    
 		gui.getContentPane().add(test);
 		

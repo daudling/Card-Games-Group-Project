@@ -1,35 +1,41 @@
 import java.util.ArrayList;
 
-public class Euchre {
+import javax.swing.JOptionPane;
+
+public class Euchre{
 	
-	private int team1, team2, inGame = 0, currentLead = 0;
+	private int inGame = 0, currentLead = 0;
+	public int team1, team2, round = 1;
 	private final int NUM_CARDS = 5;
-	private String trump, lead;
-	private Cards flipUp, leftBower, rightBower, currentHigh;
-	private ArrayList<Cards> table = new ArrayList<Cards>();
-	private ArrayList<Player> turnOrder = new ArrayList<Player>();
+	public String trump, lead;
+	private Cards flipUp;
+	private Cards leftBower = null;
+	private Cards rightBower = null;
+	private Cards currentHigh;
+	public ArrayList<Cards> table = new ArrayList<Cards>();
+	public ArrayList<Player> turnOrder = new ArrayList<Player>();
 	
 	public  Cards input = null;
-	public  boolean decided = false, pickUp = false;
+	public  boolean pickUp = false;
 	public static ArrayList<Cards> hand = null;
 	
 	public void setTrump(String trump) {
 		switch(trump) {
 		case "Spades": this.trump = "Spades";
-		rightBower = Deck.getCard(0, 10);
-		leftBower = Deck.getCard(1, 10);
+		rightBower = Deck.getCard(0, 9);
+		leftBower = Deck.getCard(1, 9);
 		break;
 		case "Clubs": this.trump = "Clubs";
-		rightBower = Deck.getCard(1, 10);
-		leftBower = Deck.getCard(0, 10);
+		rightBower = Deck.getCard(1, 9);
+		leftBower = Deck.getCard(0, 9);
 		break;
 		case "Hearts": this.trump = "Hearts";
-		rightBower = Deck.getCard(2, 10);
-		leftBower = Deck.getCard(3, 10);
+		rightBower = Deck.getCard(2, 9);
+		leftBower = Deck.getCard(3, 9);
 		break;
 		case "Diamonds": this.trump = "DiamondS";
-		rightBower = Deck.getCard(4, 10);
-		leftBower = Deck.getCard(3, 10);
+		rightBower = Deck.getCard(3, 9);
+		leftBower = Deck.getCard(2, 9);
 		}
 	}
 	
@@ -69,17 +75,29 @@ public class Euchre {
 	 * @throws InterruptedException 
 	 */
 	public void turn(int r, int team1, int team2){
+		currentLead = 0;
 		table.clear();
-		Cards temp, high = null;
+		EuchreGUI.updateTable();
+		Cards temp = null, high = null;
+		lead = null;
+		round = r;
 		int playerHigh = 0;
-		int round = 1;
 		int points1 = team1;
 		int points2 = team2;
 		Player winner = null;
 		for(Player x : turnOrder) {
 			temp = chooseCard(x);
+			if(table.isEmpty()) {
+				if(temp == leftBower) {
+					lead = trump;
+				}
+				else {
+					lead = temp.suit;
+				}
+			}
 			table.add(temp);
 			x.removeCard(temp);
+			EuchreGUI.updateTable();
 		}
 		for(Cards y : table) {
 			if(high == null) {
@@ -112,17 +130,22 @@ public class Euchre {
 			}
 		}
 		winner = turnOrder.get(playerHigh);
-		round++;
 		if(winner.team == 1) {
 			points1++;
 		}
 		else {
 			points2++;
 		}
-		if(round != 5) {
-			turn(round, points1, points2);
+		if(r != 5) {
+			lead = null;
+			EuchreGUI.updateTable();
+			JOptionPane.showMessageDialog(null, "Winner is player #" + winner.playerNum);
+			setWinnerOrder(winner.playerNum);
+			turn(round + 1, points1, points2);
 		}
 		else {
+			JOptionPane.showMessageDialog(null, "Winner is player #" + winner.playerNum);
+			setWinnerOrder(winner.playerNum);
 			if(points1 == 5) {
 				addPoints(1, 2);
 			}
@@ -137,7 +160,7 @@ public class Euchre {
 			}
 		}
 		if(team1 >= 10 || team2 >= 10) {
-			inGame = 1;
+			setGame(false);
 		}
 	}
 	
@@ -152,10 +175,28 @@ public class Euchre {
 	 * @throws InterruptedException 
 	 */
 	public Cards chooseCard(Player player){
-		decided = false;
+		int counter = 0;
 		Cards temp = new Cards();
 		switch(player.difficulty) {
-		case 0: while(decided == false) {
+		case 0: input = null;
+		Object[] options = new Object[5];
+		for(Cards x : player.getHand()) {
+			options[counter] = Deck.getVisual(x.suit, x.rank - 2);
+			counter++;
+		}
+		while(counter < 5) {
+			options[counter] = Deck.getBack();
+			counter++;
+		}
+		while(isValid(player) == false) {
+			int n = JOptionPane.showOptionDialog(null, "Choose card to play", null,
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[4]);
+			if(n > player.hand.size() - 1) {
+				input = null;
+			}
+			else {
+				input = player.hand.get(n);
+			}
 		}
 		temp = input;
 		break;
@@ -176,12 +217,14 @@ public class Euchre {
 	 * @throws InterruptedException 
 	 */
 	public boolean pickUpCard(Player player){
-		decided = false;
+		EuchreGUI.flip.setVisible(true);
+		EuchreGUI.updateTable();
 		switch(player.difficulty) {
 		case 0: hand = player.hand;
-			while(decided == false) {
-		}
-		if(pickUp = true) {
+		Object[] options = {"Yes", "no"};
+		int n = JOptionPane.showOptionDialog(null, "Pick up card", null,
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+		if(n == 0) {
 			return true;
 		}
 		break;
@@ -278,7 +321,7 @@ public class Euchre {
 					if(temp == null && isLead(x)) {
 						temp = x;
 					}
-					else if(x.rank > temp.rank) {
+					else if(temp != null && x.rank > temp.rank) {
 						temp = x;
 					}
 				}
@@ -475,7 +518,14 @@ public class Euchre {
 		}
 		else {
 			if(hasLead(player)) {
-				if(lead == trump) {
+				if(leadCount(player) == 1) {
+					for(Cards x : player.getHand()) {
+						if(isLead(x)) {
+							temp = x;
+						}
+					}
+				}
+				else if(lead == trump) {
 					if(currentHigh == rightBower) {
 						for(Cards x : player.getHand()) {
 							if(x == leftBower && trumpCount(player) == 1) {
@@ -526,13 +576,51 @@ public class Euchre {
 					}
 				}
 				else {
-					if(hasTrump(player)) {
-						if(currentHigh == rightBower) {
-							for(Cards x : player.getHand()) {
-								if(temp == null) {
-									temp = x;
-								}
-								else if(isTrump(temp) && !isTrump(x)) {
+					for(Cards x : player.getHand()) {
+						if(temp == null) {
+							temp = x;
+						}
+						else if(isTrump(currentHigh) && x.rank < temp.rank) {
+							temp = x;
+						}
+						else if(isLead(x) && temp.rank > currentHigh.rank) {
+							if(x.rank > currentHigh.rank && x.rank < temp.rank) {
+								temp = x;
+							}
+						}
+						else if(isLead(x) && temp.rank < currentHigh.rank) {
+							if(x.rank > currentHigh.rank) {
+								temp = x;
+							}
+						}
+					}
+				}
+			}
+			else {
+				if(hasTrump(player)) {
+					if(currentHigh == rightBower) {
+						for(Cards x : player.getHand()) {
+							if(temp == null) {
+								temp = x;
+							}
+							else if(isTrump(temp) && !isTrump(x)) {
+								temp = x;
+							}
+							else if(!isTrump(x) && x.rank < temp.rank) {
+								temp = x;
+							}
+						}
+					}
+					else if(currentHigh == leftBower) {
+						for(Cards x : player.getHand()) {
+							if(temp == null) {
+								temp = x;
+							}
+							else if(x == rightBower) {
+								temp = x;
+							}
+							else if(temp != rightBower) {
+								if(isTrump(temp) && !isTrump(x)) {
 									temp = x;
 								}
 								else if(!isTrump(x) && x.rank < temp.rank) {
@@ -540,44 +628,26 @@ public class Euchre {
 								}
 							}
 						}
-						else if(currentHigh == leftBower) {
-							for(Cards x : player.getHand()) {
-								if(temp == null) {
+					}
+					else if(isTrump(currentHigh)) {
+						for(Cards x : player.getHand()) {
+							if(temp == null) {
+								temp = x;
+							}
+							else if(isTrump(temp) && temp.rank < currentHigh.rank) {
+								if(!isTrump(x)) {
 									temp = x;
 								}
-								else if(x == rightBower) {
+								else if(isTrump(x) && x.rank > currentHigh.rank) {
 									temp = x;
-								}
-								else if(temp != rightBower) {
-									if(isTrump(temp) && !isTrump(x)) {
-										temp = x;
-									}
-									else if(!isTrump(x) && x.rank < temp.rank) {
-										temp = x;
-									}
 								}
 							}
-						}
-						else if(isTrump(currentHigh)) {
-							for(Cards x : player.getHand()) {
-								if(temp == null) {
+							else {
+								if(x.rank < temp.rank && !isTrump(x)) {
 									temp = x;
 								}
-								else if(isTrump(temp) && temp.rank < currentHigh.rank) {
-									if(!isTrump(x)) {
-										temp = x;
-									}
-									else if(isTrump(x) && x.rank > currentHigh.rank) {
-										temp = x;
-									}
-								}
-								else {
-									if(x.rank < temp.rank && !isTrump(x)) {
-										temp = x;
-									}
-									if(isTrump(x) && x.rank > currentHigh.rank) {
-										temp = x;
-									}
+								if(isTrump(x) && x.rank > currentHigh.rank) {
+									temp = x;
 								}
 							}
 						}
@@ -587,9 +657,22 @@ public class Euchre {
 							if(temp == null) {
 								temp = x;
 							}
-							else if(x.rank < temp.rank) {
+							else if(isTrump(x) && !isTrump(temp)) {
 								temp = x;
 							}
+							else if(isTrump(x) && isTrump(temp) && x.rank < temp.rank) {
+								temp = x;
+							}
+						}
+					}
+				}
+				else {
+					for(Cards x : player.getHand()) {
+						if(temp == null) {
+							temp = x;
+						}
+						else if(x.rank < temp.rank) {
+							temp = x;
 						}
 					}
 				}
@@ -654,7 +737,7 @@ public class Euchre {
 	 */
 	private boolean hasLead(Player player) {
 		for(Cards x : player.getHand()) {
-			if(x.suit == lead || (x == leftBower && lead == trump)) {
+			if(isLead(x)) {
 				return true;
 			}
 		}
@@ -664,7 +747,7 @@ public class Euchre {
 	private int leadCount(Player player) {
 		int count = 0;
 		for(Cards x: player.getHand()) {
-			if(x.suit == lead || (x == leftBower && lead == trump)) {
+			if(isLead(x)) {
 				count++;
 			}
 		}
@@ -678,7 +761,7 @@ public class Euchre {
 	 */
 	private boolean hasTrump(Player player) {
 		for(Cards x : player.getHand()) {
-			if(x.suit == trump || x == leftBower) {
+			if(isTrump(x)) {
 				return true;
 			}
 		}
@@ -688,7 +771,7 @@ public class Euchre {
 	private int trumpCount(Player player) {
 		int count = 0;
 		for(Cards x : player.getHand()) {
-			if(x.suit == trump || x == leftBower) {
+			if(isTrump(x)) {
 				count++;
 			}
 		}
@@ -701,7 +784,7 @@ public class Euchre {
 	 * @return
 	 */
 	private boolean isTrump(Cards card) {
-		if(card.suit == trump) {
+		if(card.suit.equals(trump) || card == leftBower) {
 			return true;
 		}
 		else {
@@ -715,12 +798,18 @@ public class Euchre {
 	 * @return
 	 */
 	private boolean isLead(Cards card) {
-		if(card.suit == lead) {
+		if(card.suit.equals(lead)) {
 			return true;
+		}
+		else if(card == leftBower) {
+			if(lead.equals(trump)) {
+				return true;
+			}
 		}
 		else {
 			return false;
 		}
+		return false;
 	}
 	
 	/**
@@ -738,10 +827,10 @@ public class Euchre {
 	 * @param winner - the playerNum value for each winner
 	 */
 	public void setWinnerOrder(int winner) {
-		if(!turnOrder.isEmpty()) {
+		if(turnOrder.isEmpty() == false) {
 			turnOrder.clear();
 			for(int i = 0; i < 4; i++) {
-				turnOrder.add(PlayerList.players.get((i + winner) % 4));
+				turnOrder.add(PlayerList.players.get((i + winner - 1) % 4));
 			}
 		}
 	}
@@ -759,29 +848,40 @@ public class Euchre {
 	 * @throws InterruptedException 
 	 */
 	public boolean startRound(){
+		Deck.reset();
+		Deck.euchre();
+		table.clear();
+		for(Player x : PlayerList.players) {
+			x.hand.clear();
+			x.addHand(NUM_CARDS);
+		}
 		flipUp = Deck.pickRandom();
+		setTrump(flipUp.suit);
 		EuchreGUI.flip.setIcon(Deck.getVisual(flipUp.suit, flipUp.rank - 2));
-		EuchreGUI.yes.setVisible(true);
-		EuchreGUI.no.setVisible(true);
 		EuchreGUI.updateTable();
 		for(Player x : turnOrder) {
 			if(pickUpCard(x)) {
-				discard(x);
+				discard(turnOrder.get(0));
+				EuchreGUI.flip.setVisible(false);
 				return true;
 			}
 		}
-		EuchreGUI.yes.setVisible(false);
-		EuchreGUI.no.setVisible(false);
-		EuchreGUI.flip.setVisible(false);
 		return false;
 	}
 	
 	public void discard(Player player){
-		decided = false;
-		switch(player.difficulty) {
-		case 0: while(decided == false) {
+		int counter = 0;
+		switch(turnOrder.get(0).difficulty) {
+		case 0: hand = player.hand;
+		Object[] options = new Object[5];
+		for(Cards x : hand) {
+			options[counter] = Deck.getVisual(x.suit,x.rank - 2);
+			counter++;
 		}
-		player.hand.remove(input);
+		int n = JOptionPane.showOptionDialog(null, "Choose card to discard", null,
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		player.hand.remove(n);
+		player.hand.add(flipUp);
 		break;
 		case 1: discardCard(player);
 		break;
@@ -789,6 +889,22 @@ public class Euchre {
 		break;
 		case 3: discardCard(player);
 		break;
+		}
+		EuchreGUI.updateTable();
+	}
+	
+	private boolean isValid(Player player) {
+		if(input == null) {
+			return false;
+		}
+		else if(table.isEmpty()) {
+			return true;
+		}
+		else if(hasLead(player) && isLead(input) == false) {
+			return false;
+		}
+		else {
+			return true;
 		}
 	}
 	
@@ -825,6 +941,10 @@ public class Euchre {
 		resetTable();
 		setOrder();
 		Deck.euchre();
+		PlayerList.players.get(0).team = 1;
+		PlayerList.players.get(1).team = 2;
+		PlayerList.players.get(2).team = 1;
+		PlayerList.players.get(3).team = 2;
 		for(Player x : PlayerList.players) {
 			if(!x.hand.isEmpty()) {
 				x.hand.clear();
@@ -832,9 +952,12 @@ public class Euchre {
 			x.addHand(NUM_CARDS);
 		}
 		EuchreGUI.updateTable();
-		if(startRound()) {
-			while(inGame == 0) {
-				turn(0, 0, 0);
+		while(inGame == 0) {
+			if(startRound()) {
+				turn(1, 0, 0);
+			}
+			else {
+				playEuchre();
 			}
 		}
 		if(team1 >= 10) {
@@ -856,6 +979,19 @@ public class Euchre {
 					z.losses++;
 				}
 			}
+		}
+		resetTable();
+		EuchreGUI.updateTable();
+		GUI.layout.show(GUI.panel,  "Menu");
+		if(team1 >= 10) {
+			JOptionPane.showMessageDialog(null, "Winner is team #1");
+			team1 = 0;
+			team2 = 0;
+		}
+		else if(team2 >= 10) {
+			JOptionPane.showMessageDialog(null, "Winner is team #2");
+			team1 = 0;
+			team2 = 0;
 		}
 	}
 }

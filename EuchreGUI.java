@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -9,14 +11,23 @@ import javax.swing.*;
 public class EuchreGUI extends JPanel implements ActionListener {
 	
 	private JLabel title;
+	private static JLabel teamOne;
+	private static JLabel teamTwo;
+	private static JLabel trump;
+	private static JLabel lead;
+	private static JLabel round;
 	public static JLabel flip;
 	public static JButton start, yes, no;
-	public static ArrayList<JButton> bot = new ArrayList<JButton>();
+	public static ArrayList<JLabel> bot = new ArrayList<JLabel>();
 	public static ArrayList<JLabel> left = new ArrayList<JLabel>();
 	public static ArrayList<JLabel> top = new ArrayList<JLabel>();
 	public static ArrayList<JLabel> right = new ArrayList<JLabel>();
-	public ArrayList<JLabel> center = new ArrayList<JLabel>();
-	public JButton one = new JButton(), two = new JButton(), three = new JButton(), four = new JButton(), five = new JButton();
+	public static ArrayList<JLabel> center = new ArrayList<JLabel>();
+	public JLabel one = new JLabel(Deck.getBack()),
+			two = new JLabel(Deck.getBack()),
+			three = new JLabel(Deck.getBack()),
+			four = new JLabel(Deck.getBack()),
+			five = new JLabel(Deck.getBack());
 	public JLabel lone = new JLabel(Deck.getBack()),
 			ltwo = new JLabel(Deck.getBack()),
 			lthree = new JLabel(Deck.getBack()),
@@ -68,7 +79,7 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		center.add(tc);
 		center.add(rc);
 		
-		setPreferredSize(new Dimension(2560, 1440));
+		setPreferredSize(new Dimension(1920, 1080));
 		setLayout(new GridBagLayout());
 		GridBagConstraints loc = new GridBagConstraints();
 		setBackground(new Color(0, 102, 0));
@@ -76,7 +87,7 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		title = new JLabel("Euchre");
 		flip = new JLabel(Deck.getBack());
 		flip.setVisible(false);
-		for(JButton x : bot) {
+		for(JLabel x : bot) {
 			x.setIcon(Deck.getBack());
 			x.setVisible(true);
 			x.setBackground(new Color(0, 102, 0));
@@ -108,6 +119,11 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		no.setEnabled(false);
 		flip = new JLabel(Deck.getBack());
 		flip.setVisible(false);
+		teamOne = new JLabel("Team 1 : " + game.team1);
+		teamTwo = new JLabel("team 2 : " + game.team2);
+		trump = new JLabel("Trump : ");
+		lead = new JLabel("Lead : ");
+		round = new JLabel("Round: 1");
 		
 		loc.gridx = 0;
 		loc.gridy = 0;
@@ -122,10 +138,23 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		add(yes, loc);
 		loc.gridx = 4;
 		add(no, loc);
+		loc.gridx = 3;
+		loc.gridy = 1;
+		add(teamOne, loc);
+		loc.gridy = 5;
+		add(teamTwo, loc);
+		loc.gridx = 1;
+		loc.gridy = 5;
+		add(trump, loc);
+		loc.gridx = 5;
+		add(lead, loc);
+		loc.gridy = 0;
+		loc.gridx = 6;
+		add(round, loc);
 		
 		loc.gridx = 1;
 		loc.gridy = 7;
-		for(JButton x : bot) {
+		for(JLabel x : bot) {
 			add(x, loc);
 			loc.gridx++;
 		}
@@ -164,11 +193,6 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		loc.gridy = 3;
 		add(center.get(3), loc);
 		
-		one.addActionListener(this);
-		two.addActionListener(this);
-		three.addActionListener(this);
-		four.addActionListener(this);
-		five.addActionListener(this);
 		start.addActionListener(this);
 		yes.addActionListener(this);
 		no.addActionListener(this);
@@ -180,23 +204,18 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		
 		if(source == one) {
 			game.input = Euchre.hand.get(0);
-			game.decided = true;
 		}
 		else if(source == two) {
 			game.input = Euchre.hand.get(1);
-			game.decided = true;
 		}
 		else if(source == three) {
 			game.input = Euchre.hand.get(2);
-			game.decided = true;
 		}
 		else if(source == four) {
 			game.input = Euchre.hand.get(3);
-			game.decided = true;
 		}
 		else if(source == five) {
 			game.input = Euchre.hand.get(4);
-			game.decided = true;
 		}
 		else if(source == start) {
 			start();
@@ -205,13 +224,11 @@ public class EuchreGUI extends JPanel implements ActionListener {
 		}
 		else if(source == yes) {
 			game.pickUp = true;
-			game.decided = true;
-			flip.setVisible(false);
+			notifyAll();
 		}
 		else if(source == no) {
 			game.pickUp = false;
-			game.decided = true;
-			flip.setVisible(false);
+			notifyAll();
 		}
 	}
 	
@@ -226,52 +243,71 @@ public class EuchreGUI extends JPanel implements ActionListener {
 	public static void updateTable() {
 		int counter = 0;
 		hand = PlayerList.players.get(0).getHand();
-		for(JButton x : bot) {
-			if(counter < hand.size()) {
-				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
-			}
-			counter++;
-		}
 		while(counter < 5) {
 			bot.get(counter).setIcon(Deck.getBack());
 			counter++;
 		}
 		counter = 0;
+		for(JLabel x : bot) {
+			if(counter < hand.size()) {
+				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
+			}
+			counter++;
+		}
+		counter = 0;
 		hand = PlayerList.players.get(1).getHand();
+		while(counter < 5) {
+			left.get(counter).setIcon(Deck.getBack());
+			counter++;
+		}
+		counter = 0;
 		for(JLabel x : left) {
 			if(counter < hand.size()) {
 				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
 			}
 			counter++;
 		}
+		counter = 0;
+		hand = PlayerList.players.get(2).getHand();
 		while(counter < 5) {
-			left.get(counter).setIcon(Deck.getBack());
+			top.get(counter).setIcon(Deck.getBack());
 			counter++;
 		}
 		counter = 0;
-		hand = PlayerList.players.get(2).getHand();
 		for(JLabel x : top) {
 			if(counter < hand.size()) {
 				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
 			}
 			counter++;
 		}
+		counter = 0;
+		hand = PlayerList.players.get(3).getHand();
 		while(counter < 5) {
-			top.get(counter).setIcon(Deck.getBack());
+			right.get(counter).setIcon(Deck.getBack());
 			counter++;
 		}
 		counter = 0;
-		hand = PlayerList.players.get(3).getHand();
 		for(JLabel x : right) {
 			if(counter < hand.size()) {
 				x.setIcon(Deck.getVisual(hand.get(counter).suit, hand.get(counter).rank - 2));
 			}
 			counter++;
 		}
-		while(counter < 5) {
-			right.get(counter).setIcon(Deck.getBack());
+		counter = 0;
+		while(counter < 4) {
+			center.get(counter).setIcon(Deck.getBack());
 			counter++;
 		}
+		counter = 0;
+		for(Cards x : game.table) {
+			center.get(game.turnOrder.get(counter).playerNum - 1).setIcon(Deck.getVisual(game.table.get(counter).suit, game.table.get(counter).rank - 2));
+			counter++;
+		}
+		trump.setText("Trump : " + game.trump);
+		lead.setText("Lead : " + game.lead);
+		teamOne.setText("Team 1 : " + game.team1);
+		teamTwo.setText("Team 2 : " + game.team2);
+		round.setText("Round : " + game.round);
 	}
 	
 	private void start() {
