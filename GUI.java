@@ -93,9 +93,9 @@ public class GUI extends JPanel implements ActionListener {
 		backItem.addActionListener(this);
 		
 		menu.add(blackJack);
-		menu.add(poker);
+//		menu.add(poker);
 		menu.add(euchre);
-		menu.add(goFish);
+//		menu.add(goFish);
 		menu.add(playerList);
 		menu.add(exit);
 		
