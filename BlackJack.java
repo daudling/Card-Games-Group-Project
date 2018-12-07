@@ -29,7 +29,11 @@ public class BlackJack {
     private void setMoney(int amount){
         money = amount;
     }
-
+    
+    /**
+     * Adds a card to either the dealer or the user.
+     * @param person - The player who gets the card.
+     */
     public void hit(Player person){
         person.addRandomCard();
         user.displayHand();
@@ -37,7 +41,11 @@ public class BlackJack {
         dealer.displayHand();
         System.out.println("Dealer:" + calcHand(dealer));
     }
-
+    
+    /**
+     * Determines the winner for Black Jack.
+     * @return - True if the player wins, false if they lose.
+     */
     public boolean checkWinner(){
         if(calcHand(user) <= LIMIT){
             if(calcHand(user) == calcHand(dealer))
@@ -51,7 +59,12 @@ public class BlackJack {
         else
             return false;
     }
-
+    
+    /**
+     * Gives or takes away money from the player depending on if they win or not.
+     * @param isWin - Uses check winner to determine that the player has won.
+     * @param tie - Checks to see if there is a tie.
+     */
     public void results(boolean isWin, boolean tie){
         if(isWin){
             JOptionPane.showMessageDialog(null,"YOU WIN! You've gained " + wager + "$");
@@ -66,7 +79,11 @@ public class BlackJack {
             money += 0;
         }
     }
-
+    /**
+     * Calculates the score based on what the player or dealer has.
+     * @param person - Either the dealer or the user.
+     * @return
+     */
     public int calcHand(Player person){
         int total = 0;
         int cardNum;
@@ -95,7 +112,10 @@ public class BlackJack {
         }
         return total;
     }
-
+    /**
+     * Plays the text based version of a game of Black Jack without the GUI.
+     * @param bet - The amount the user is willing to bet.
+     */
     public void playGame (int bet){
         Deck.blackjack();
         dealer.addHand(1);
@@ -149,7 +169,10 @@ public class BlackJack {
         reset();
 
     }
-
+    /**
+     * Plays a full text based version of Black Jack where
+     * you can continue playing after either winning or losing.
+     */
     public void playBlackJack(){
         ans = "";
         while(!ans.equalsIgnoreCase("no") && money > 0){
@@ -176,12 +199,23 @@ public class BlackJack {
 
     }
     
+    /**
+     * Plays Black Jack with the use of a GUI. This part starts the game when the 
+     * user clicks on the "Play Button". 
+     * @param bet - The amount that the user wants to bet. 
+     */
     public void playGameGUIUser(int bet){
         Deck.blackjack();
         dealer.addHand(1);
         user.addHand(2);
         wager = bet;
     }
+    
+    /**
+     * Plays Black Jack with the use of a GUI. This part ends the game when the user
+     * clicks on the "Stay Button" and the dealer takes his turn.
+     * @param bet - The amount that the user wants to bet.
+     */
     public void playGameGUIDealer(int bet){    
         isStay = false;
         
@@ -191,14 +225,12 @@ public class BlackJack {
                 if(calcHand(user) <= calcHand(dealer))
                     isStay = true;
             }
-//            if(calcHand(dealer) <= LIMIT)
-//                results(checkWinner(), isTie);
-//            else
-//                results(true,false);
         }
-        //user.money = money;
     }
     
+    /**
+     * Resets the game by making the user and dealer's hand null and makes everything return to false.
+     */
     public void reset(){
         user.hand = null;
         dealer.hand = null;
@@ -206,6 +238,10 @@ public class BlackJack {
         isTie = false;
     }
     
+    /**
+     * The main for Black Jack that runs the text version.
+     * @param args
+     */
     public static void main(String [] args){
         Deck.getInstance();
         BlackJack eGame = new BlackJack();
