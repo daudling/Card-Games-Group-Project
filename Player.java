@@ -19,6 +19,10 @@ public class Player {
 		team = 0;
 		money = 0;
 	}
+	public Player(int player) {
+		playerNum = player;
+		hand = new ArrayList<Cards>();
+	}
 	
 	/**
 	 * Removes selected card from players hand
